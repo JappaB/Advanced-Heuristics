@@ -39,7 +39,7 @@ def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 	houseList = []
 	
 	for x in range(n_batteries):
-		batteryList.append(Battery.battery( position =[randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
+		batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
 
 	for x in range(n_houses):
 		houseList.append(solarHouse.solarpanelHouse(position = [randint(0, boardLength), randint(0, boardHeight)]))
@@ -52,5 +52,6 @@ def saveBoards(n, boardLength, boardHeight, n_houses, n_batteries):
 		saveBoard(houseList, batteryList, "board"+str(i))
 	return True
 
-
+# def OpdrachtA(board):
+	
 

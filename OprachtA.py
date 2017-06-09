@@ -1,5 +1,6 @@
 import pickle
 import solarHouse
+import Battery
 
 def saveBoard(houseList, batteryList, boardName):
 	""" saves board with name """
@@ -30,4 +31,26 @@ def cost(n_batteries, houseList, wireCost, batteryCost):
 	for house in houseList:
 		cost += manhattenDistance(house.position, house.batteryAssignment.position)*wireCost
 	return cost
+
+def createBoard(boardLength, boardHeight, n_houses, n_batteries):
+	""" """
+
+	batteryList = []
+	houseList = []
+	
+	for x in range(n_batteries):
+		batteryList.append(Battery.battery( position =[randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
+
+	for x in range(n_houses):
+		houseList.append(solarHouse.solarpanelHouse(position = [randint(0, boardLength), randint(0, boardHeight)]))
+
+	return houseList, batteryList
+
+def saveBoards(n, boardLength, boardHeight, n_houses, n_batteries):
+	for i in range(n):
+		houseList, batteryList = createBoard(boardLength, boardHeight, n_houses, n_batteries)
+		saveBoard(houseList, batteryList, "board"+str(i))
+	return True
+
+
 

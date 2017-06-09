@@ -4,6 +4,7 @@ import numpy as np
 import random
 from random import randint
 import matplotlib.pyplot as plt
+import HousingBlocks
 
 def manhattenDistance(position, goal):
 	""" calculates the minimal length of the wire from base to goal """
@@ -98,10 +99,22 @@ def plotGrid(houseList, batteryList):
 
 
 
+# def placeBlocks(n_Blocks):
+
+
+# 	occupiedSpace = []
+
+# 	for x in range(n_Blocks)
+
+
+# 	return houseList
+
+
+
 import cProfile, pstats, StringIO
 pr = cProfile.Profile()
 pr.enable()
-a,b = k_means(10,4000,1000,1000)
+a,b = k_means(10,200,100,100)
 pr.disable()
 s = StringIO.StringIO()
 sortby = 'cumulative'

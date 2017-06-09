@@ -10,90 +10,102 @@ def manhattenDistance(position, goal):
 
 	return sum(abs(a-b) for a,b in zip(position,goal))
 
-def cost(n_batteries, houseList, wirecost, batterycost):
-	cost = 0
-	cost += n_batteries*batterycost
-	for house in houseList:
-		cost += manhattenDistance(house.position, house.batteryAssignment.position)*wirecost
+def cost(n_batteries, houseList, wireCost, batteryCost):
+	""" calculates the cost of a setup of batteries and houses """
 
+	cost = 0
+	cost += n_batteries*batteryCost
+	for house in houseList:
+		cost += manhattenDistance(house.position, house.batteryAssignment.position)*wireCost
 	return cost
 
+def k_means(n_Batteries, n_Houses, boardLength, boardHeight):
+	
+	# initiation
+	somethingChanged = True
+	houseList = []
+	batteryList = []
 
-somethingChanged = True
-
-results = []
-n_tries = 4
-houseList = []
-batteryList = []
-for n_Batteries in range(3,n_tries):
-	# batteryList = []
-	# houseList = []
-	# n_Batteries = 2
-	n_Houses = 400
-	boardLength = 100
-	boardHeight = 100
-
+	# build batteries
 	for x in xrange(n_Batteries):
 		newBatt = Battery.battery()
 		newBatt.name = 'Battery : '+str(x)
 		newBatt.position = [randint(boardLength/4, 3*(boardLength/4)), randint(boardHeight/4, 3*(boardHeight/4))]
 		batteryList.append(newBatt)
-		# print newBatt.name, newBatt.position, newBatt.color
 
-
+	# build houses
 	for x in xrange(n_Houses):
 		newHouse = solarHouse.solarpanelHouse()
 		newHouse.position = [randint(0, boardLength), randint(0, boardHeight)]
 		houseList.append(newHouse)
-		# print newHouse.position
 
-
-	print "start", n_Batteries
-
-
-	z = 0
-	while(z < 1000):
-		z += 1
-		# assignment
+	it = 0
+	while(somethingChanged):
+		it += 1
+		
+		# assignment of houses
 		for house in houseList:
 			distances = []
 			for battery in batteryList:
 				distances.append(manhattenDistance(battery.position,house.position))
 			index = np.argmin(distances)
 			house.batteryAssignment = batteryList[index]
-			# print house.position, house.batteryAssignment.name
 
-
-		# relocating 
+		# relocating batteries
+		changedlist = []
 		for battery in batteryList:
+			
+			# save old location
+			oldPosition = tuple(battery.position)
+			
+			# initiate values for new battery-position
 			n = 0
 			positionSum = np.array([0,0])
+
+			# check per house if it is assignet to current battery
 			for house in houseList:
+				# if so, count its position in
 				if (house.batteryAssignment == battery):
 					n += 1
 					positionSum += house.position
 			battery.position = list(positionSum/n)
-			# print battery.name, battery.position, n
+			
+			# save wether the battery moved since last time
+			if (tuple(battery.position) == oldPosition):
+				changedlist.append(True)
+			else:
+				changedlist.append(False)
 
-	results.append(cost(n_Batteries,houseList,3,40))
-	# for house in houseList:
-	# 	print house.position, house.batteryAssignment.name
-
-	# print ""
-
-
-# plt.plot(xrange(1,n_tries), results)
-	
-for house in houseList:
-	# print house.position, house.batteryAssignment.name
-	colorNow = house.batteryAssignment.color
-	plt.plot([house.position[0]],[house.position[1]],  'ro', color=colorNow)
-
-for battery in batteryList:
-	plt.plot([battery.position[0]],[battery.position[1]],  '^', color=battery.color)
-
-plt.grid()
-plt.show()
+		# stop if no battery changed
+		if (all(i == True for i in changedlist)):
+			somethingChanged = False
+			print it
+	return houseList, batteryList
 
 
+def plotGrid(houseList, batteryList):
+	""" plots the grid """
 
+	for house in houseList:
+		colorNow = house.batteryAssignment.color
+		plt.plot([house.position[0]],[house.position[1]],  'ro', color=colorNow)
+
+	for battery in batteryList:
+		plt.plot([battery.position[0]],[battery.position[1]],  '^', color=battery.color)
+
+	plt.grid()
+	plt.show()
+
+
+
+import cProfile, pstats, StringIO
+pr = cProfile.Profile()
+pr.enable()
+a,b = k_means(10,4000,1000,1000)
+pr.disable()
+s = StringIO.StringIO()
+sortby = 'cumulative'
+ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+ps.print_stats() # TODO
+print s.getvalue()
+plotGrid(a,b)

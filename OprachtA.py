@@ -2,6 +2,10 @@ import pickle
 import solarHouse
 import Battery
 
+
+def main():
+	pass
+
 def saveBoard(houseList, batteryList, boardName):
 	""" saves board with name """
 
@@ -54,3 +58,6 @@ def saveBoards(n, boardLength, boardHeight, n_houses, n_batteries):
 
 
 
+### RUN PROGRAM ###
+if __name__ == '__main__':
+	main()

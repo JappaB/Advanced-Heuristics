@@ -1,7 +1,4 @@
-# batteryList = []
-# n_batteries = 5
-# totalCapacity = 1000
-# batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
+import random
 capacityList = [100,200,300,350,50]
 allBatteries = False
 
@@ -10,32 +7,34 @@ class battery(object):
 	def __init__(self, batteryNumber, capacity, housingList, overCapacitated, position = [0,0]):
 		self.position = position
 		self.batteryNumber = batteryNumber
+		self.capacityLeft = capacity
 		#self.batteryType = batteryType
 		self.capacity = capacity
 		self.overCapacitated = overCapacitated #boolean
 		self.assignedHouses = {}
+		self.color = "#%06x" % random.randint(0, 0xFFFFFF)
 		for house in housingList:
 			self.assignedHouses[house.name] = (house, False)
 
 	def update(self):
-		capacityUsed = 0
+		self.capacityLeft = self.capacity
 		for houseName in self.assignedHouses:
 			houseTuple = self.assignedHouses[houseName]
-			if houseTuple[1] == True:
-				capacityUsed += houseTuple[0].netto
-		if capacityUsed > self.capacity:
+			if (houseTuple[1] == True):
+				self.capacityLeft -= houseTuple[0].netto
+		if (self.capacityLeft < 0):
 			self.overCapacitated = True
 		else:
 			self.overCapacitated = False
 
 
-def createBatteries(n_batteries, totalCapacity, batteryPositionList, batteryList, houseList):
+def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList, batteryList, houseList):
 
 	for i in range(n_batteries):
 		batteries = battery(i, capacityList[i], houseList, False, position = batteryPositionList[i])
 		batteryList.append(batteries)
 
-def batteryInformation(allBatteries, number):
+def batteryInformation(allBatteries, number, batteryList):
 
 	if allBatteries == True:
 		for i in range (len(batteryList)):
@@ -47,9 +46,14 @@ def batteryInformation(allBatteries, number):
 			print "this is "+attr+" of battery number "+str(number)
 			print "value: "+ str(value)
 
-createBatteries(n_batteries,totalCapacity, batteryPositionList, capacityList)
-print batteryList
+def houseInformation(houseList):
 
-batteryInformation(False,2)
+	for i in range (len(houseList)):
+		for attr, value in houseList[i].__dict__.iteritems():
+			print "this is "+attr+" of house number "+str(i)
+			print "value: " + str(value)
+	
+
+
 
 

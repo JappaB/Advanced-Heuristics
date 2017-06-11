@@ -15,9 +15,11 @@ class battery(object):
 		self.housingList = housingList
 		self.overCapacitated = overCapacitated #boolean
 
-def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList):
+	
 
-	capacityList
+
+
+def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList):
 
 	for i in range(n_batteries):
 		batteries = battery(i, capacityList[i], [], False, batteryPositionList[i])

@@ -19,16 +19,16 @@ def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames:
-	# 	f = open(board+".csv", "w")
-		houseList, batteryList = loadBoard(board)
-		changeCapacity(batteryList,2)
-	# 	for x in range(1,20):
-	# 		capacityList = [int(0.1*x*i) for i in capacityListOriginal]
-	# 		# print capacityList
-	# 		start_time = time.time()
-		print hillClimber.hillClimber(10000, houseList, batteryList )
-	# 		Elapsed = (time.time() - start_time)
-	# 		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
+		f = open(board+".csv", "w")
+		for x in range(80,200):
+
+			houseList, batteryList = loadBoard(board)
+			changeCapacity(batteryList, x*0.01)
+			start_time = time.time()
+			cost, overCapacity = hillClimber.hillClimber(500, houseList, batteryList )
+			Elapsed = (time.time() - start_time)
+			print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity
+			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
 
 
 def saveBoard(houseList, batteryList, boardName, width, height):
@@ -124,8 +124,9 @@ def plotGrid(houseList, batteryList):
 
 def changeCapacity(batteryList, factor):
 	for battery in batteryList:
-		battery.capacity = int(battery.capacity * factor)
+		battery.capacity = int(battery.capacity*factor)
 
 ### RUN PROGRAM ###
 if __name__ == '__main__':
 	main()
+

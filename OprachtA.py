@@ -8,20 +8,24 @@ import time
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
-capacityList = [100,200,300,350,50]
+capacityList = []
+capacityListOriginal = [100,200,300,350,50]
 
 totalCapacity = 1000
 
 def main():
 
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames:
-		f = open(board+".csv", "w")
+	for board in boardNames[:1]:
+	# 	f = open(board+".csv", "w")
 		houseList, batteryList = loadBoard(board)
-		start_time = time.time()
-		cost, overCapacity = hillClimber
-		Elapsed = (time.time() - start_time)
-		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
+	# 	for x in range(1,20):
+	# 		capacityList = [int(0.1*x*i) for i in capacityListOriginal]
+	# 		# print capacityList
+	# 		start_time = time.time()
+		print hillClimber.hillClimber(1000, houseList, batteryList )
+	# 		Elapsed = (time.time() - start_time)
+	# 		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
 
 
 def saveBoard(houseList, batteryList, boardName):

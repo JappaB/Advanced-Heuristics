@@ -1,5 +1,5 @@
 import random
-capacityList = [100,200,300,350,50]
+
 allBatteries = False
 
 class battery(object):

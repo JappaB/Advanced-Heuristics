@@ -25,7 +25,7 @@ def main():
 	# 		capacityList = [int(0.1*x*i) for i in capacityListOriginal]
 	# 		# print capacityList
 	# 		start_time = time.time()
-		print hillClimber.hillClimber(1000, houseList, batteryList )
+		print hillClimber.hillClimber(10000, houseList, batteryList )
 	# 		Elapsed = (time.time() - start_time)
 	# 		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
 

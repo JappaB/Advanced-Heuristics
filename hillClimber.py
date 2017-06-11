@@ -73,15 +73,15 @@ def hillClimber(iterations, houseList, batteryList):
 		battery2.update()
 
 		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
-		costAfter = cost(batteryList, houseList, wireCost, batteryCost)
-
-		if costBefore < costAfter:
-			# Swap back
-			# battery1.assignedHouses[house1.name][1] = True
-			# battery1.assignedHouses[house2.name][1] = False
-			# battery2.assignedHouses[house1.name][1] = False
-			# battery2.assignedHouses[house2.name][1] = True
+		
+		if (overCapacityAfter > overCapacityBefore):
 			swap(battery1, battery2, house1, house2)
+		else:
+			costAfter = cost(batteryList, houseList, wireCost, batteryCost)
+			if costBefore < costAfter:
+			# Swap back
+			
+				swap(battery1, battery2, house1, house2)
 
 
 

@@ -12,15 +12,27 @@ class battery(object):
 		self.batteryNumber = batteryNumber
 		#self.batteryType = batteryType
 		self.capacity = capacity
-		self.housingList = housingList
 		self.overCapacitated = overCapacitated #boolean
+		self.assignedHouses = {}
+		for house in housingList:
+			self.assignedHouses[house.name] = (house, False)
 
-def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList):
+	def update(self):
+		capacityUsed = 0
+		for houseName in self.assignedHouses:
+			houseTuple = self.assignedHouses[houseName]
+			if houseTuple[1] == True:
+				capacityUsed += houseTuple[0].netto
+		if capacityUsed > self.capacity:
+			self.overCapacitated = True
+		else:
+			self.overCapacitated = False
 
-	capacityList
+
+def createBatteries(n_batteries, totalCapacity, batteryPositionList, batteryList, houseList):
 
 	for i in range(n_batteries):
-		batteries = battery(i, capacityList[i], [], False, batteryPositionList[i])
+		batteries = battery(i, capacityList[i], houseList, False, position = batteryPositionList[i])
 		batteryList.append(batteries)
 
 def batteryInformation(allBatteries, number):

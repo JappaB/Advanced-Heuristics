@@ -1,4 +1,4 @@
-def hillClimber(iterations, houseList):
+def hillClimber(iterations, houseList, batteryList):
 
 	for i in range(iterations):
 		
@@ -27,7 +27,7 @@ def hillClimber(iterations, houseList):
 		if battery1.overCapacitated or battery2.overCapacitated == True:
 			overCapacitated(battery1, battery2, house1, house2)
 
-		# If none are overcapacitated, the swap is accepted if the total costs are lower afterwards
+		# If none are overcapacitated, the swap is accepted if the total costs (in euro's) are lower afterwards
 		else:
 			costBefore = cost(n_batteries, houseList, wireCost, batteryCost)
 
@@ -47,6 +47,11 @@ def hillClimber(iterations, houseList):
 				battery2.assignedhouse[house2] = True
 
 
+
+	totalOvercap = totalOvercapacity(batteryList)
+	# return final cost, hoe veel overcapaciteit er nog is
+	return max(costAfter,costBefore), totalOvercap
+
 def overCapacitated(battery1, battery2, house1, house2):
 
 	# If both are overcapacitated, swap is always accepted
@@ -58,6 +63,50 @@ def overCapacitated(battery1, battery2, house1, house2):
 
 	# If one is overcapacitated, the swap is accepted if it is less overcapacitated afterwards
 	if battery1.overCapacitated == True and battery2.overCapacitated == False:
-		
 
+		# Overcapacity is the the total capacity - capacity used (so a negative number if there is overcapacity)
+		overcapacityBefore = battery1.capacityLeft
 
+		# Swap
+		battery1.assignedhouse[house1] = False
+		battery1.assignedhouse[house2] = True
+		battery2.assignedhouse[house1] = True
+		battery2.assignedhouse[house2] = False
+
+		overcapacityAfter = battery1.capacityLeft
+
+		if overcapacityBefore > overcapacityAfter:
+			# Swap Back
+			battery1.assignedhouse[house1] = True
+			battery1.assignedhouse[house2] = False
+			battery2.assignedhouse[house1] = False
+			battery2.assignedhouse[house2] = True
+
+	# If Two is overcapacitated, the swap is accepted if it is less overcapacitated afterwards
+	if battery1.overCapacitated == False and battery2.overCapacitated == True:
+
+		# Overcapacity is the the total capacity - capacity used (so a negative number if there is overcapacity)
+		overcapacityBefore = battery2.capacityLeft
+
+		# Swap
+		battery1.assignedhouse[house1] = False
+		battery1.assignedhouse[house2] = True
+		battery2.assignedhouse[house1] = True
+		battery2.assignedhouse[house2] = False
+
+		overcapacityAfter = battery2.capacityLeft
+
+		if overcapacityBefore > overcapacityAfter:
+			# Swap Back
+			battery1.assignedhouse[house1] = True
+			battery1.assignedhouse[house2] = False
+			battery2.assignedhouse[house1] = False
+			battery2.assignedhouse[house2] = True
+
+def totalOvercapacity(batteryList):
+	overcap = 0
+
+	for i in range (len(batteryList)):
+		overcap += batteryList[i].capacityLeft
+
+	return overcap

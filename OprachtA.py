@@ -3,6 +3,12 @@ import solarHouse
 import Battery
 
 
+batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
+capacityList = [100,200,300,350,50]
+batteryList = []
+houseList = []
+totalCapacity = 1000
+
 def main():
 	pass
 
@@ -39,9 +45,8 @@ def cost(n_batteries, houseList, wireCost, batteryCost):
 def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 	""" """
 
-	batteryList = []
-	houseList = []
-	
+
+
 	for x in range(n_batteries):
 		batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
 

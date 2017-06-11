@@ -21,6 +21,7 @@ def main():
 	for board in boardNames:
 	# 	f = open(board+".csv", "w")
 		houseList, batteryList = loadBoard(board)
+		changeCapacity(batteryList,1.05)
 	# 	for x in range(1,20):
 	# 		capacityList = [int(0.1*x*i) for i in capacityListOriginal]
 	# 		# print capacityList
@@ -120,6 +121,10 @@ def plotGrid(houseList, batteryList):
 
 	plt.grid()
 	plt.show()
+
+def changeCapacity(batteryList, factor):
+	for battery in batteryList:
+		battery.capacity * factor
 
 ### RUN PROGRAM ###
 if __name__ == '__main__':

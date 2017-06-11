@@ -2,6 +2,7 @@ import pickle
 import solarHouse
 import Battery
 from random import randint
+import matplotlib.pyplot as plt
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -10,11 +11,12 @@ capacityList = [100,200,300,350,50]
 totalCapacity = 1000
 
 def main():
-	saveBoards(5, 50, 50, 150, 5)
-	a,b = loadBoard("board4")
-
+	# saveBoards(5, 50, 50, 150, 5)
+	a,b = loadBoard("board0")
+	# print len(a), len(b)
 	# print a, b
-	Battery.batteryInformation(True,0, b)
+	Battery.houseInformation(a)
+	# plotGrid(a,b)
 	pass
 
 def saveBoard(houseList, batteryList, boardName):
@@ -52,12 +54,30 @@ def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 
 	batteryList = []
 	houseList = []
+
+	housePositionList = []
 	for x in range(n_houses):
-		houseList.append(solarHouse.solarpanelHouse("house " + str(x), randint(5,10), position = [randint(0, boardLength), randint(0, boardHeight)]))
+		newPosition = [randint(0,boardLength), randint(0,boardHeight)]
+		for x in housePositionList:
+			if (tuple(x) == tuple(newPosition)):
+				newPosition[0] = (newPosition[0] + randint(-2,2)) % boardLength
+				newPosition[1] = (newPosition[1] + randint(-2,2)) % boardHeight
+		housePositionList.append(newPosition)
+	for x in range(n_houses):
+		houseList.append(solarHouse.solarpanelHouse("house" + str(x), randint(5,10), position = housePositionList[x]))
 
 	batteryPositionList =[]
 	for x in range(n_batteries):
-		batteryPositionList.append([randint(0,boardLength), randint(0,boardHeight)])
+		newPosition = [randint(0,boardLength), randint(0,boardHeight)]
+		for x in batteryPositionList:
+			if (tuple(x) == tuple(newPosition)):
+				newPosition[0] = (newPosition[0] + 1) % boardLength
+				newPosition[1] = (newPosition[1] + 1) % boardHeight
+		for x in housePositionList:
+			if (tuple(x) == tuple(newPosition)):
+				newPosition[0] = (newPosition[0] + randint(-2,2)) % boardLength
+				newPosition[1] = (newPosition[1] + randint(-2,2)) % boardHeight
+		batteryPositionList.append(newPosition)
 	Battery.createBatteries(n_batteries, 1000, batteryPositionList, capacityList, batteryList, houseList)
 		# batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
 
@@ -69,8 +89,18 @@ def saveBoards(n, boardLength, boardHeight, n_houses, n_batteries):
 		saveBoard(houseList, batteryList, "board"+str(i))
 	return True
 
-# def OpdrachtA(board):
-	
+def plotGrid(houseList, batteryList):
+	""" plots the grid """
+
+	for house in houseList:
+		# colorNow = house.batteryAssignment.color
+		plt.plot([house.position[0]],[house.position[1]],  'ro', color="r")
+
+	for battery in batteryList:
+		plt.plot([battery.position[0]],[battery.position[1]],  '^', color=battery.color)
+
+	plt.grid()
+	plt.show()
 
 ### RUN PROGRAM ###
 if __name__ == '__main__':

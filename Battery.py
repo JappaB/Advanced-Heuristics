@@ -29,13 +29,13 @@ class battery(object):
 			self.overCapacitated = False
 
 
-def createBatteries(n_batteries, totalCapacity, batteryPositionList, batteryList, houseList):
+def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList, batteryList, houseList):
 
 	for i in range(n_batteries):
 		batteries = battery(i, capacityList[i], houseList, False, position = batteryPositionList[i])
 		batteryList.append(batteries)
 
-def batteryInformation(allBatteries, number):
+def batteryInformation(allBatteries, number, batteryList):
 
 	if allBatteries == True:
 		for i in range (len(batteryList)):
@@ -47,9 +47,9 @@ def batteryInformation(allBatteries, number):
 			print "this is "+attr+" of battery number "+str(number)
 			print "value: "+ str(value)
 
-createBatteries(n_batteries,totalCapacity, batteryPositionList, capacityList)
-print batteryList
+# createBatteries(n_batteries,totalCapacity, batteryPositionList, capacityList)
+# print batteryList
 
-batteryInformation(False,2)
+# batteryInformation(False,2)
 
 

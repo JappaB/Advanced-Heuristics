@@ -6,12 +6,15 @@ from random import randint
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
 capacityList = [100,200,300,350,50]
-batteryList = []
-houseList = []
+
 totalCapacity = 1000
 
 def main():
+	saveBoards(5, 50, 50, 150, 5)
+	a,b = loadBoard("board4")
 
+	# print a, b
+	Battery.batteryInformation(True,0, b)
 	pass
 
 def saveBoard(houseList, batteryList, boardName):
@@ -47,13 +50,15 @@ def cost(n_batteries, houseList, wireCost, batteryCost):
 def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 	""" """
 
+	batteryList = []
+	houseList = []
 	for x in range(n_houses):
 		houseList.append(solarHouse.solarpanelHouse("house " + str(x), randint(5,10), position = [randint(0, boardLength), randint(0, boardHeight)]))
 
 	batteryPositionList =[]
 	for x in range(n_batteries):
 		batteryPositionList.append([randint(0,boardLength), randint(0,boardHeight)])
-	createBatteries(n_batteries, 1000, batteryPositionList, capacityList, batteryList, houseList):
+	Battery.createBatteries(n_batteries, 1000, batteryPositionList, capacityList, batteryList, houseList)
 		# batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
 
 	return houseList, batteryList

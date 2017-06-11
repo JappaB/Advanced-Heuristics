@@ -1,15 +1,17 @@
 import pickle
 import solarHouse
 import Battery
+from random import randint
 
 
-batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
+# batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
 capacityList = [100,200,300,350,50]
 batteryList = []
 houseList = []
 totalCapacity = 1000
 
 def main():
+
 	pass
 
 def saveBoard(houseList, batteryList, boardName):
@@ -45,13 +47,14 @@ def cost(n_batteries, houseList, wireCost, batteryCost):
 def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 	""" """
 
-
-
-	for x in range(n_batteries):
-		batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
-
 	for x in range(n_houses):
-		houseList.append(solarHouse.solarpanelHouse(position = [randint(0, boardLength), randint(0, boardHeight)]))
+		houseList.append(solarHouse.solarpanelHouse("house " + str(x), randint(5,10), position = [randint(0, boardLength), randint(0, boardHeight)]))
+
+	batteryPositionList =[]
+	for x in range(n_batteries):
+		batteryPositionList.append([randint(0,boardLength), randint(0,boardHeight)])
+	createBatteries(n_batteries, 1000, batteryPositionList, capacityList, batteryList, houseList):
+		# batteryList.append(Battery.battery( position = [randint(0, boardLength), randint(0, boardHeight)] , "A", 500, [], False))
 
 	return houseList, batteryList
 

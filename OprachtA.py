@@ -1,8 +1,10 @@
 import pickle
 import solarHouse
 import Battery
+import hillClimber
 from random import randint
 import matplotlib.pyplot as plt
+import time
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -11,13 +13,16 @@ capacityList = [100,200,300,350,50]
 totalCapacity = 1000
 
 def main():
-	# saveBoards(5, 50, 50, 150, 5)
-	a,b = loadBoard("board0")
-	# print len(a), len(b)
-	# print a, b
-	Battery.houseInformation(a)
-	# plotGrid(a,b)
-	pass
+
+	boardNames = ["board0", "board1", "board2", "board3", "board4"]
+	for board in boardNames:
+		f = open(board+".csv", "w")
+		houseList, batteryList = loadBoard(board)
+		start_time = time.time()
+		cost, overCapacity = hillClimber
+		Elapsed = (time.time() - start_time)
+		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
+
 
 def saveBoard(houseList, batteryList, boardName):
 	""" saves board with name """

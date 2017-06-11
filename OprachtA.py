@@ -5,18 +5,20 @@ import hillClimber
 from random import randint
 import matplotlib.pyplot as plt
 import time
+import Board
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
-capacityList = []
+
 capacityListOriginal = [100,200,300,350,50]
+capacityList = capacityListOriginal
 
 totalCapacity = 1000
 
 def main():
-
+	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[:1]:
+	for board in boardNames:
 	# 	f = open(board+".csv", "w")
 		houseList, batteryList = loadBoard(board)
 	# 	for x in range(1,20):
@@ -28,20 +30,28 @@ def main():
 	# 		f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
 
 
-def saveBoard(houseList, batteryList, boardName):
+def saveBoard(houseList, batteryList, boardName, width, height):
 	""" saves board with name """
 
+	board = Board.board()
+	board.batteryList = batteryList
+	board.houseList = houseList
+	board.height = height
+	board.width = width
+	board.n_houses = len(houseList)
+	board.n_batteries = len(batteryList)
 	with open(boardName+'.pkl', 'wb') as output:
-		pickle.dump(houseList, output, pickle.HIGHEST_PROTOCOL)
-		pickle.dump(batteryList, output, pickle.HIGHEST_PROTOCOL)
+		pickle.dump(board, output, pickle.HIGHEST_PROTOCOL)
+		# pickle.dump(batteryList, output, pickle.HIGHEST_PROTOCOL)
 	return True
 
 def loadBoard(boardName):
 	""" loads board with name """
 
 	with open(boardName+'.pkl', 'rb') as input:
-		houseList = pickle.load(input)
-		batteryList = pickle.load(input)
+		inputPickle = pickle.load(input)
+		houseList = inputPickle.houseList
+		batteryList = inputPickle.batteryList
 	return houseList, batteryList
 
 def manhattenDistance(position, goal):
@@ -95,7 +105,7 @@ def createBoard(boardLength, boardHeight, n_houses, n_batteries):
 def saveBoards(n, boardLength, boardHeight, n_houses, n_batteries):
 	for i in range(n):
 		houseList, batteryList = createBoard(boardLength, boardHeight, n_houses, n_batteries)
-		saveBoard(houseList, batteryList, "board"+str(i))
+		saveBoard(houseList, batteryList, "board"+str(i), boardLength, boardHeight)
 	return True
 
 def plotGrid(houseList, batteryList):

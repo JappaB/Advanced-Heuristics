@@ -14,7 +14,7 @@ class battery(object):
 		self.assignedHouses = {}
 		self.color = "#%06x" % random.randint(0, 0xFFFFFF)
 		for house in housingList:
-			self.assignedHouses[house.name] = (house, False)
+			self.assignedHouses[house.name] = [house, False]
 
 	def update(self):
 		self.capacityLeft = self.capacity
@@ -30,6 +30,7 @@ class battery(object):
 
 def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList, batteryList, houseList):
 
+	# print n_batteries, totalCapacity, batteryPositionList, capacityList
 	for i in range(n_batteries):
 		batteries = battery(i, capacityList[i], houseList, False, position = batteryPositionList[i])
 		batteryList.append(batteries)

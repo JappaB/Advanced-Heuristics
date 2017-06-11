@@ -18,17 +18,17 @@ totalCapacity = 1000
 def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames:
+	for board in boardNames[:1]:
 		f = open(board+".csv", "w")
 		for x in range(80,200):
 
 			houseList, batteryList = loadBoard(board)
 			changeCapacity(batteryList, x*0.01)
 			start_time = time.time()
-			cost, overCapacity = hillClimber.hillClimber(500, houseList, batteryList )
+			cost, overCapacity, itt = hillClimber.hillClimber(50, houseList, batteryList )
 			Elapsed = (time.time() - start_time)
-			print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity
-			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+"\n")
+			print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+"\n")
 
 
 def saveBoard(houseList, batteryList, boardName, width, height):

@@ -13,9 +13,15 @@ def hillClimber(iterations, houseList, batteryList):
 	wireCost = 1
 	batteryCost = 100
 
-	
+	nothingChanged = 0
 
-	for i in range(iterations):
+	iterating = 0
+
+	while(nothingChanged < iterations):
+
+		iterating += 1
+
+		# print nothingChanged
 		
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
@@ -42,23 +48,7 @@ def hillClimber(iterations, houseList, batteryList):
 		# try:
 		battery1.update()
 		battery2.update()
-		# except:
-		# 	print "fail\n\n"
-		# 	i = 0
-		# 	for house in houseList:
-		# 		Check = False
-		# 		for battery in batteryList:
-		# 			if battery.assignedHouses[house.name][1]:
-		# 				Check = True
-		# 				print "house ", i," : ", battery.batteryNumber
-		# 		if Check == False:
-		# 			Battery.houseInformation([house])
-		# 		i += 1
-			# print batteryList
-
-		# Check whether one or both batteries are overcapacitated
-		# if (battery1.overCapacitated or battery2.overCapacitated):
-		# 	overCapacitated(battery1, battery2, house1, house2)
+		
 
 		# If none are overcapacitated, the swap is accepted if the total costs (in euro's) are lower afterwards
 		
@@ -74,20 +64,23 @@ def hillClimber(iterations, houseList, batteryList):
 
 		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
 		
-		if (overCapacityAfter > overCapacityBefore):
+		if (overCapacityAfter >= overCapacityBefore):
 			swap(battery1, battery2, house1, house2)
+			nothingChanged += 1
 		else:
 			costAfter = cost(batteryList, houseList, wireCost, batteryCost)
 			if costBefore < costAfter:
 			# Swap back
-			
+				nothingChanged += 1
 				swap(battery1, battery2, house1, house2)
+			else:
+				nothingChanged = 0
 
 
 
 	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), totalOvercap
+	return min(costAfter,costBefore), totalOvercap, iterating
 
 def overCapacitated(battery1, battery2, house1, house2):
 

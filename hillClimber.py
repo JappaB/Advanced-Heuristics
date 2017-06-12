@@ -63,8 +63,9 @@ def hillClimber(iterations, houseList, batteryList):
 		battery2.update()
 
 		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
-		
-		if (overCapacityAfter >= overCapacityBefore):
+
+		# als een van de twee overcapacitated is, dan wil je dat eerst fixen, anders ga je score optimaliseren
+		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter >= overCapacityBefore):
 			swap(battery1, battery2, house1, house2)
 			nothingChanged += 1
 		else:

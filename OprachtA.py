@@ -18,18 +18,25 @@ totalCapacity = 1000
 def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[:1]:
-		f = open(board+"jasper90-120-100it-sample100.csv", "w")
-		for i in range(100):
-			for x in range(90,120):
-
+	for board in boardNames[:3]:
+		f = open(board+"stijn105-115-30it-sample100cap100_200_300_350_50.csv", "w")
+		for x in range(105,115):
+			results = [[],[],[],[]]
+			for i in range(100):
+				print "iteratie ", i, " board", board
 				houseList, batteryList = loadBoard(board)
 				changeCapacity(batteryList, x*0.01)
 				start_time = time.time()
-				cost, overCapacity, itt = hillClimber.hillClimber(100, houseList, batteryList )
+				cost, overCapacity, itt = hillClimber.hillClimber(30, houseList, batteryList )
 				Elapsed = (time.time() - start_time)
 				print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
-				f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+","+str(i)+"\n")
+				results[0].append(cost)
+				results[1].append(overCapacity)
+				results[2].append(Elapsed)
+				results[3].append(itt)
+			# f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+"\n")
+			f.write(str(np.mean(results[0]))+","+str(np.mean(results[1]))+","+str(np.mean(results[2]))+","+str(np.mean(results[3]))+"\n")
+
 
 
 def saveBoard(houseList, batteryList, boardName, width, height):

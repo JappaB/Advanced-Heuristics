@@ -68,6 +68,7 @@ def hillClimber(iterations, houseList, batteryList):
 		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter >= overCapacityBefore):
 			swap(battery1, battery2, house1, house2)
 			nothingChanged += 1
+			costAfter = costBefore
 		else:
 			costAfter = cost(batteryList, houseList, wireCost, batteryCost)
 			if costBefore < costAfter:
@@ -82,55 +83,6 @@ def hillClimber(iterations, houseList, batteryList):
 	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
 	return min(costAfter,costBefore), totalOvercap, iterating
-
-def overCapacitated(battery1, battery2, house1, house2):
-
-	# If both are overcapacitated, swap is always accepted
-	if (battery1.overCapacitated and battery2.overCapacitated):
-		swap(battery1, battery2, house1, house2)
-
-	# If one is overcapacitated, the swap is accepted if it is less overcapacitated afterwards
-	elif (battery1.overCapacitated and not battery2.overCapacitated == False):
-
-		# Overcapacity is the the total capacity - capacity used (so a negative number if there is overcapacity)
-		overcapacityBefore = battery1.capacityLeft
-
-		# Swap
-		battery1.assignedHouses[house1.name][1] = False
-		battery1.assignedHouses[house2.name][1] = True
-		battery2.assignedHouses[house1.name][1] = True
-		battery2.assignedHouses[house2.name][1] = False
-
-		overcapacityAfter = battery1.capacityLeft
-
-		if overcapacityBefore > overcapacityAfter:
-			# Swap Back
-			battery1.assignedHouses[house1.name][1] = True
-			battery1.assignedHouses[house2.name][1] = False
-			battery2.assignedHouses[house1.name][1] = False
-			battery2.assignedHouses[house2.name][1] = True
-
-	# If Two is overcapacitated, the swap is accepted if it is less overcapacitated afterwards
-	elif battery1.overCapacitated == False and battery2.overCapacitated == True:
-
-		# Overcapacity is the the total capacity - capacity used (so a negative number if there is overcapacity)
-		overcapacityBefore = battery2.capacityLeft
-
-		# Swap
-		battery1.assignedHouses[house1.name][1] = False
-		battery1.assignedHouses[house2.name][1] = True
-		battery2.assignedHouses[house1.name][1] = True
-		battery2.assignedHouses[house2.name][1] = False
-
-		overcapacityAfter = battery2.capacityLeft
-
-		if overcapacityBefore > overcapacityAfter:
-			# Swap Back
-			battery1.assignedHouses[house1.name][1] = True
-			battery1.assignedHouses[house2.name][1] = False
-			battery2.assignedHouses[house1.name][1] = False
-			battery2.assignedHouses[house2.name][1] = True
-
 
 def swap(battery1, battery2, house1, house2):
 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]

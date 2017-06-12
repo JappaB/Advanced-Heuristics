@@ -19,8 +19,8 @@ totalCapacity = 1000
 def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[:3]:
-		f = open(board+"Stijn105-115-30it-sample100cap100_200_300_350_50.csv", "w")
+	for board in boardNames[4:5]:
+		f = open(board+"Jasper105-115-40it-sample100cap100_200_300_350_50.csv", "w")
 		for x in range(105,115):
 			results = [[],[],[],[]]
 			for i in range(100):
@@ -28,7 +28,7 @@ def main():
 				houseList, batteryList = loadBoard(board)
 				changeCapacity(batteryList, x*0.01)
 				start_time = time.time()
-				cost, overCapacity, itt = hillClimber.hillClimber(30, houseList, batteryList )
+				cost, overCapacity, itt = hillClimber.hillClimber(40, houseList, batteryList )
 				Elapsed = (time.time() - start_time)
 				print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
 				results[0].append(cost)

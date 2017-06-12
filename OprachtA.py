@@ -19,16 +19,17 @@ def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames[:1]:
-		f = open(board+".csv", "w")
-		for x in range(80,200):
+		f = open(board+"jasper90-120-100it-sample100.csv", "w")
+		for i in range(100):
+			for x in range(90,120):
 
-			houseList, batteryList = loadBoard(board)
-			changeCapacity(batteryList, x*0.01)
-			start_time = time.time()
-			cost, overCapacity, itt = hillClimber.hillClimber(50, houseList, batteryList )
-			Elapsed = (time.time() - start_time)
-			print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
-			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+"\n")
+				houseList, batteryList = loadBoard(board)
+				changeCapacity(batteryList, x*0.01)
+				start_time = time.time()
+				cost, overCapacity, itt = hillClimber.hillClimber(100, houseList, batteryList )
+				Elapsed = (time.time() - start_time)
+				print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+				f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+","+str(i)+"\n")
 
 
 def saveBoard(houseList, batteryList, boardName, width, height):

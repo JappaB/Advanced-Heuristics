@@ -6,6 +6,7 @@ from random import randint
 import matplotlib.pyplot as plt
 import time
 import Board
+import numpy as np
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -19,11 +20,11 @@ def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames[:3]:
-		f = open(board+"stijn105-115-30it-sample100cap100_200_300_350_50.csv", "w")
+		f = open(board+"Stijn105-115-30it-sample100cap100_200_300_350_50.csv", "w")
 		for x in range(105,115):
 			results = [[],[],[],[]]
 			for i in range(100):
-				print "iteratie ", i, " board", board
+				
 				houseList, batteryList = loadBoard(board)
 				changeCapacity(batteryList, x*0.01)
 				start_time = time.time()

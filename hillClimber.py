@@ -3,6 +3,7 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
+	# House to battery assignment
 	for house in houseList:
 		battery = random.choice(batteryList)
 		battery.assignedHouses[house.name][1] = True
@@ -18,6 +19,7 @@ def hillClimber(iterations, houseList, batteryList):
 	iterating = 0
 
 	while(nothingChanged < iterations):
+
 
 		iterating += 1
 
@@ -85,10 +87,17 @@ def hillClimber(iterations, houseList, batteryList):
 	return min(costAfter,costBefore), totalOvercap, iterating
 
 def swap(battery1, battery2, house1, house2):
-	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
-	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	#50/50 chance to either swap between two houses or to assign one house to a new battery
+	swapBool = random.choice([0, 1])
+
+	if swapBool = 1:
+		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	else:
+		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]	
 
 def totalOvercapacity(batteryList):
 	overcap = 0

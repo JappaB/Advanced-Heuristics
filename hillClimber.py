@@ -59,7 +59,17 @@ def hillClimber(iterations, houseList, batteryList):
 		if (battery1.overCapacitated or battery2.overCapacitated):
 			overCapacityBefore = -( battery1.capacityLeft + battery2.capacityLeft)
 
-		swap(battery1, battery2, house1, house2)
+		assigned = True
+		if (((not battery1.overCapacitated) and (not battery2.overCapacitated)) or (battery1.capacityLeft == battery2.capacityLeft)):
+			swap(battery1, battery2, house1, house2)
+			assigned = False
+		else:
+			assignedHouse = house1
+			if(battery1.capacityLeft < battery2.capacityLeft):
+				assignedHouse = house1
+			elif(battery1.capacityLeft > battery2.capacityLeft):
+				assignedHouse = house2
+			assignment(battery1,battery2,assignedHouse)
 
 		battery1.update()
 		battery2.update()
@@ -68,7 +78,10 @@ def hillClimber(iterations, houseList, batteryList):
 
 		# als een van de twee overcapacitated is, dan wil je dat eerst fixen, anders ga je score optimaliseren
 		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter >= overCapacityBefore):
-			swap(battery1, battery2, house1, house2)
+			if (assigned):
+				assignment(battery1,battery2,assignedHouse)
+			else:
+				swap(battery1, battery2, house1, house2)
 			nothingChanged += 1
 			costAfter = costBefore
 		else:
@@ -76,28 +89,55 @@ def hillClimber(iterations, houseList, batteryList):
 			if costBefore < costAfter:
 			# Swap back
 				nothingChanged += 1
-				swap(battery1, battery2, house1, house2)
+				if (assigned):
+					assignment(battery1,battery2,assignedHouse)
+				else:
+					swap(battery1, battery2, house1, house2)
 			else:
 				nothingChanged = 0
 
 
-
+	for battery in batteryList:
+		battery.update()
 	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), totalOvercap, iterating
+	return min(costAfter,costBefore), -totalOvercap, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery
-	swapBool = random.choice([0, 1])
+	# swapBool =random.choice([0, 1])
 
-	if swapBool = 1:
-		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
-		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
-	else:
-		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]	
+	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+
+
+def assignment(battery1, battery2, house1):
+	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+
+
+
+
+
+	# if ((battery1.capacityLeft >0) and ( battery2.capacityLeft > 0)):
+	# 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	# 	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+	# 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	# 	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	# else:
+	# 	if (battery1.capacityLeft < battery2.capacityLeft):
+	# 		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	# 		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	# 	elif(battery1.capacityLeft > battery2.capacityLeft):
+	# 		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+	# 		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	# 	else:
+	# 		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	# 		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+	# 		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	# 		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
 
 def totalOvercapacity(batteryList):
 	overcap = 0

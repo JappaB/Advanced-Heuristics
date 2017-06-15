@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import time
 import Board
 import numpy as np
+import random
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -17,12 +18,67 @@ capacityList = capacityListOriginal
 totalCapacity = 1000
 
 def main():
+	boardNames = ["board0", "board1", "board2", "board3", "board4"]
+	for board in boardNames[0:1]:
+		f = open(board+"Stijn_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
+		results2 = []
+		for x in range(1,6):
+			results1 = [[],[],[]]
+			temp = 0
+			for i in range(1):
+				start_time = time.time()
+				deviation = x*0.5
+				newCapacities = [500,500,500,500,500]
+				houseList, batteryList = loadBoard(board)
+				changeCapacityTo(batteryList, newCapacities)
+				# changeCapacity(batteryList, newCapacities)
+				changeDeviation(houseList, deviation, 13, 2500)
+
+				cost, overCapacity, itt = hillClimber.hillClimber(50, houseList, batteryList )
+				results1[0].append(cost)
+				results1[1].append(overCapacity)
+				results1[2].append(itt)
+				solveableCheck = True
+				for battery in batteryList:
+					if (battery.overCapacitated == True):
+						solveableCheck = False
+
+				for battery in batteryList:
+					print battery.capacityLeft
+					print battery.capacity
+					print battery.overCapacitated
+					print ""
+
+				print overCapacity
+
+				return
+
+
+				if solveableCheck:
+					temp += 1
+
+				Elapsed = (time.time() - start_time)
+				print "working on #",x, "\% cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+
+			results2.append(temp)
+
+			f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+"\n")
+		
+		print results2
+		plt.plot(range(len(results2)),results2)
+		plt.show()
+
+
+
+
+
+
+def main1():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames[4:5]:
 		f = open(board+"Jasper105-115-40it-sample100cap100_200_300_350_50.csv", "w")
 		for x in range(105,115):
-			results = [[],[],[],[]]
 			for i in range(100):
 				
 				houseList, batteryList = loadBoard(board)
@@ -134,6 +190,26 @@ def plotGrid(houseList, batteryList):
 def changeCapacity(batteryList, factor):
 	for battery in batteryList:
 		battery.capacity = int(battery.capacity*factor)
+
+def changeCapacityTo(batteryList, capacityList):
+	for i in range(len(batteryList)):
+		batteryList[i].capacity = capacityList[i]
+
+def changeDeviation(houseList, deviation, median, totalCapacity):
+	randoms = []
+	total = 0.0
+	for i in range(len(houseList)):
+		newRandom = random.uniform(median-deviation,median+deviation)
+		total += newRandom
+		randoms.append(newRandom)
+
+	scale = totalCapacity/total
+
+	for i in range(len(houseList)):
+		houseList[i].netto = randoms[i]*scale
+
+
+
 
 ### RUN PROGRAM ###
 if __name__ == '__main__':

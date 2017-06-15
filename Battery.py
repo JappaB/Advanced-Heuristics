@@ -35,17 +35,13 @@ def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityLis
 		batteries = battery(i, capacityList[i], houseList, False, position = batteryPositionList[i])
 		batteryList.append(batteries)
 
-def batteryInformation(allBatteries, number, batteryList):
+def batteryInformation(batteryList):
 
-	if allBatteries == True:
-		for i in range (len(batteryList)):
-			for attr, value in batteryList[i].__dict__.iteritems():
-				print "this is "+attr+" of battery number "+str(i)
-				print "value: " + str(value)
-	else:
-		for attr, value in batteryList[number].__dict__.iteritems():
-			print "this is "+attr+" of battery number "+str(number)
-			print "value: "+ str(value)
+
+	for i in range (len(batteryList)):
+		for attr, value in batteryList[i].__dict__.iteritems():
+			print "this is "+attr+" of battery number "+str(i)
+			print "value: " + str(value)
 
 def houseInformation(houseList):
 

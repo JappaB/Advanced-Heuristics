@@ -14,7 +14,7 @@ class battery(object):
 		self.assignedHouses = {}
 		self.color = "#%06x" % random.randint(0, 0xFFFFFF)
 		for house in housingList:
-			self.assignedHouses[house.name] = [house, False]
+			self.assignedHouses[house.name] = [house, False, manhattenDistance(self.position,house.position)]
 
 	def update(self):
 		self.capacityLeft = self.capacity
@@ -54,3 +54,7 @@ def houseInformation(houseList):
 
 
 
+def manhattenDistance(position, goal):
+	""" calculates the minimal length of the wire from base to goal """
+
+	return sum(abs(a-b) for a,b in zip(position,goal))

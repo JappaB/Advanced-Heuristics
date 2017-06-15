@@ -86,7 +86,7 @@ def hillClimber(iterations, houseList, batteryList):
 			costAfter = costBefore
 		else:
 			costAfter = cost(batteryList, houseList, wireCost, batteryCost)
-			if costBefore < costAfter:
+			if (costBefore <= costAfter):
 			# Swap back
 				nothingChanged += 1
 				if (assigned):
@@ -101,7 +101,7 @@ def hillClimber(iterations, houseList, batteryList):
 		battery.update()
 	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), -totalOvercap, iterating
+	return min(costAfter,costBefore), totalOvercap, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery
@@ -118,44 +118,23 @@ def assignment(battery1, battery2, house1):
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
 
 
-
-
-
-	# if ((battery1.capacityLeft >0) and ( battery2.capacityLeft > 0)):
-	# 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-	# 	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
-	# 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-	# 	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
-	# else:
-	# 	if (battery1.capacityLeft < battery2.capacityLeft):
-	# 		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-	# 		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-	# 	elif(battery1.capacityLeft > battery2.capacityLeft):
-	# 		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
-	# 		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
-	# 	else:
-	# 		battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
-	# 		battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
-	# 		battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-	# 		battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
-
 def totalOvercapacity(batteryList):
 	overcap = 0
 
 	for i in range (len(batteryList)):
 		overcap += batteryList[i].capacityLeft
 
-	return overcap
+	return -overcap
 
 def cost(batteryList, houseList, wireCost, batteryCost):
 	""" calculates the cost of a setup of batteries and houses """
 
 	cost = 0
-	cost += len(batteryList)*batteryCost
+	# cost += len(batteryList)*batteryCost
 	for battery in batteryList:
 		for houseKey in battery.assignedHouses:
 			if (battery.assignedHouses[houseKey][1]):
-				cost += manhattenDistance(battery.assignedHouses[houseKey][0].position, battery.position)*wireCost
+				cost += battery.assignedHouses[houseKey][2]
 	return cost
 
 def manhattenDistance(position, goal):

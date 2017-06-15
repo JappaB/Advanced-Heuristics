@@ -20,21 +20,22 @@ totalCapacity = 1000
 def main():
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames[0:1]:
-		f = open(board+"Stijn_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
+	# saveBoards(5,50,50,150,5)
+		f = open(board+"Stijn_sneller_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
 		results2 = []
-		for x in range(1,6):
+		for x in range(1,24):
 			results1 = [[],[],[]]
 			temp = 0
-			for i in range(1):
+			for i in range(100):
 				start_time = time.time()
 				deviation = x*0.5
-				newCapacities = [500,500,500,500,500]
+				newCapacities = [510,510,510,510,510]
 				houseList, batteryList = loadBoard(board)
 				changeCapacityTo(batteryList, newCapacities)
 				# changeCapacity(batteryList, newCapacities)
 				changeDeviation(houseList, deviation, 13, 2500)
 
-				cost, overCapacity, itt = hillClimber.hillClimber(50, houseList, batteryList )
+				cost, overCapacity, itt = hillClimber.hillClimber(100, houseList, batteryList )
 				results1[0].append(cost)
 				results1[1].append(overCapacity)
 				results1[2].append(itt)
@@ -43,24 +44,25 @@ def main():
 					if (battery.overCapacitated == True):
 						solveableCheck = False
 
-				for battery in batteryList:
-					print battery.capacityLeft
-					print battery.capacity
-					print battery.overCapacitated
-					print ""
+				# for battery in batteryList:
+				# 	print battery.capacityLeft
+				# 	print battery.capacity
+				# 	print battery.overCapacitated
+				# 	print ""
 
-				print overCapacity
+				# print overCapacity
 
-				return
+				# return
 
 
 				if solveableCheck:
 					temp += 1
 
 				Elapsed = (time.time() - start_time)
-				print "working on #",x, "\% cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+				print "working on #",str(x/2.0), "% cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed, " solveable : ", solveableCheck
 
 			results2.append(temp)
+			print "percentage : ", temp, "%"
 
 			f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+"\n")
 		

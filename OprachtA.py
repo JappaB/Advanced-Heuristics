@@ -12,7 +12,7 @@ from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from matplotlib import cm
 fig = plt.figure()
-ax = fig.add_subplot(111, projection='3d')
+# ax = fig.add_subplot(111, projection='3d')
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -55,7 +55,7 @@ def main3():
 
 
 
-def main():
+def main4():
 	boardNames = ["board0", "board1", "board2"]
 	for board in boardNames[0:1]:
 		
@@ -103,11 +103,11 @@ def main():
 
 
 
-def main2():
+def main():
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[0:1]:
+	for board in boardNames[3:4]:
 	# saveBoards(5,50,50,150,5)
-		f = open(board+"Stijn_sneller520_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
+		f = open(board+"board1Jasper_find_sigmoid_stddev_newboard1(fasterdatastructure)-510cap-100it.csv", "w")
 		results2 = []
 		for x in range(1,24):
 			results1 = [[],[],[]]
@@ -115,7 +115,7 @@ def main2():
 			for i in range(100):
 				start_time = time.time()
 				deviation = x*0.5
-				newCapacities = [520,520,520,520,520]
+				newCapacities = [510,510,510,510,510]
 				houseList, batteryList = loadBoard(board)
 				changeCapacityTo(batteryList, newCapacities)
 				# changeCapacity(batteryList, newCapacities)
@@ -164,7 +164,7 @@ def main2():
 def main1():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[4:5]:
+	for board in boardNames[:1]:
 		f = open(board+"Jasper105-115-40it-sample100cap100_200_300_350_50.csv", "w")
 		for x in range(105,115):
 			for i in range(100):

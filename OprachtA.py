@@ -85,7 +85,7 @@ def main():
 		with open(board+'cap505dev5_walk.pkl', 'wb') as output:
 			pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
 
-		print "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " dev gem", np.mean(walks['dev'])
+		print "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " mean solutions per walk : ",np.mean(walks['solutions']), " amount of walks without solution : ", walks['solutions'].count(0) , " dev gem ", np.mean(walks['dev'])
 		# print walks
 		# Z = np.reshape(walk, (1000,1000))
 		# X = np.arange(0, 1000, 1)

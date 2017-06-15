@@ -8,6 +8,11 @@ import time
 import Board
 import numpy as np
 import random
+from mpl_toolkits.mplot3d import Axes3D
+from matplotlib.ticker import LinearLocator, FormatStrFormatter
+from matplotlib import cm
+fig = plt.figure()
+ax = fig.add_subplot(111, projection='3d')
 
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
@@ -17,11 +22,92 @@ capacityList = capacityListOriginal
 
 totalCapacity = 1000
 
+
+def main3():
+	saveBoards(3,50,50,150,5)
+	boardNames = ["board0", "board1", "board2"]
+	deviations = [12,10,6]
+	capacities = [520,515,505]
+
+	for i in range(len(boardNames)):
+		board = boardNames[i]
+		houseList, batteryList = loadBoard(board)
+		newCapacities = [capacities[i] for x in range(5)]
+		changeCapacityTo(batteryList, newCapacities)
+		deviation = deviations[i]
+		changeDeviation(houseList, deviation, 13, 2500)
+
+		newBoard = Board.board()
+
+		newBoard.height = 50
+		newBoard.width = 50
+		newBoard.n_houses = 150
+		newBoard.n_batteries = 5
+		newBoard.houseList =  houseList
+		newBoard.batteryList = batteryList
+
+		with open(boardName+'_walk.pkl', 'wb') as output:
+			pickle.dump(newBoard, output, pickle.HIGHEST_PROTOCOL)
+
+
+
+
+
+
+
 def main():
+	boardNames = ["board0", "board1", "board2"]
+	for board in boardNames[0:1]:
+		
+
+		walks = {}
+		walks['mean'] = []
+		walks['median'] = []
+		walks['solutions'] = []
+		walks['dev'] = []
+		for i in range(100):
+			print "walk ", i
+			houseList, batteryList = loadBoard(board)
+			newCapacities = [505 for x in range(5)]
+			changeCapacityTo(batteryList, newCapacities)
+			changeDeviation(houseList, 4, 13, 2500)
+			# a,b,c,walk = hillClimber.hillClimber(100,houseList,batteryList) #
+			walk = randomWalker(houseList, batteryList, 10000)
+			walks['mean'].append(np.mean(walk))
+			walks['median'].append(np.median(walk))
+			walks['dev'].append(np.std(walk))
+			counter = 0
+			for w in walk:
+				if w == 0:
+					counter += 1
+			walks['solutions'].append(counter)
+
+		with open(board+'cap505dev5_walk.pkl', 'wb') as output:
+			pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
+
+		print "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " dev gem", np.mean(walks['dev'])
+		# print walks
+		# Z = np.reshape(walk, (1000,1000))
+		# X = np.arange(0, 1000, 1)
+		# Y = np.arange(0, 1000, 1)
+		# X, Y = np.meshgrid(X, Y)
+
+
+		# ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
+		# plt.show()
+
+		# plt.plot(range(len(walk)),walk)
+
+		# plt.show()
+
+
+
+
+def main2():
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
 	for board in boardNames[0:1]:
 	# saveBoards(5,50,50,150,5)
-		f = open(board+"Stijn_sneller_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
+		f = open(board+"Stijn_sneller520_findSigmoidDeviation1_24_batt500_capacity_2500.csv", "w")
 		results2 = []
 		for x in range(1,24):
 			results1 = [[],[],[]]
@@ -29,7 +115,7 @@ def main():
 			for i in range(100):
 				start_time = time.time()
 				deviation = x*0.5
-				newCapacities = [510,510,510,510,510]
+				newCapacities = [520,520,520,520,520]
 				houseList, batteryList = loadBoard(board)
 				changeCapacityTo(batteryList, newCapacities)
 				# changeCapacity(batteryList, newCapacities)
@@ -64,7 +150,7 @@ def main():
 			results2.append(temp)
 			print "percentage : ", temp, "%"
 
-			f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+"\n")
+			f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(temp)+"\n")
 		
 		print results2
 		plt.plot(range(len(results2)),results2)
@@ -209,6 +295,55 @@ def changeDeviation(houseList, deviation, median, totalCapacity):
 
 	for i in range(len(houseList)):
 		houseList[i].netto = randoms[i]*scale
+
+
+def randomWalker(houseList, batteryList, iterations):
+	# House to battery assignment
+	for house in houseList:
+		battery = random.choice(batteryList)
+		battery.assignedHouses[house.name][1] = True
+
+	scoreList = []
+	for i in range(iterations):
+		swapBool =random.choice([True, True])
+		house1 = random.choice(houseList)
+		house2 = random.choice(houseList)
+		battery1 = 0
+		battery2 = 0
+		for battery in batteryList:
+			if battery.assignedHouses[house1.name][1]:
+				battery1 = battery
+			if battery.assignedHouses[house2.name][1]:
+				battery2 = battery
+		if (swapBool):
+			swap(battery1, battery2, house1, house2)
+		else:
+			assignment(battery1,battery2,house1)
+
+		battery1.update()
+		battery2.update()
+		score = 0
+		for battery in batteryList:
+			if battery.capacityLeft < 0:
+				score -= battery.capacityLeft
+		scoreList.append(score)
+
+	return scoreList
+
+
+def swap(battery1, battery2, house1, house2):
+	#50/50 chance to either swap between two houses or to assign one house to a new battery
+	# swapBool =random.choice([0, 1])
+
+	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
+	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+
+
+def assignment(battery1, battery2, house1):
+	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
+	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
 
 
 

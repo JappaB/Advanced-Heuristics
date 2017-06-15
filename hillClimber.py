@@ -3,6 +3,8 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
+	walk = []
+
 	# House to battery assignment
 	for house in houseList:
 		battery = random.choice(batteryList)
@@ -31,9 +33,6 @@ def hillClimber(iterations, houseList, batteryList):
 		battery1 = 0
 		battery2 = 0
 		#overcapacitated or not
-
-		battery1OverCapacitated = True
-		battery2OverCapacitated = True
 
 		# Check to which battery the houses are linked
 		for battery in batteryList:
@@ -73,6 +72,11 @@ def hillClimber(iterations, houseList, batteryList):
 
 		battery1.update()
 		battery2.update()
+		score = 0
+		for battery in batteryList:
+			if battery.capacityLeft < 0:
+				score -= battery.capacityLeft
+		walk.append(score)
 
 		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
 
@@ -101,7 +105,7 @@ def hillClimber(iterations, houseList, batteryList):
 		battery.update()
 	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), totalOvercap, iterating
+	return min(costAfter,costBefore), totalOvercap, iterating, walk
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery

@@ -165,12 +165,13 @@ def main():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
 	for board in boardNames[:]:
-		f = open(board+"testWithHillclimber1000itt1000exit.csv", "w")
+		f = open(board+"testaftermajorbug.csv", "w")
 		f.write("str(cost)+,+str(overCapacity)+,+str(Elapsed)+,+str(itt)+,+str(reset)+\n")
 		# results = [[],[],[],[],[]]
-		for i in range(1000):			
+		for i in range(10):			
 			houseList, batteryList = loadBoard(board)
 			start_time = time.time()
+			changeCapacityTo(batteryList, [502,502,502,502,502])
 			cost, reset, itt = hillClimber.hillClimber(1000, houseList, batteryList )
 			Elapsed = (time.time() - start_time)
 			overCapacity = 0

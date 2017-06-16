@@ -3,12 +3,10 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
-	walk = []
+	
 
-	# House to battery assignment
-	for house in houseList:
-		battery = random.choice(batteryList)
-		battery.assignedHouses[house.name][1] = True
+
+
 
 	# Battery.batteryInformation(True,0,batteryList)
 
@@ -72,11 +70,6 @@ def hillClimber(iterations, houseList, batteryList):
 
 		battery1.update()
 		battery2.update()
-		score = 0
-		for battery in batteryList:
-			if battery.capacityLeft < 0:
-				score -= battery.capacityLeft
-		walk.append(score)
 
 		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
 
@@ -138,7 +131,7 @@ def cost(batteryList, houseList, wireCost, batteryCost):
 	for battery in batteryList:
 		for houseKey in battery.assignedHouses:
 			if (battery.assignedHouses[houseKey][1]):
-				cost += battery.assignedHouses[houseKey][2]
+				cost += manhattenDistance(battery.position, battery.assignedHouses[houseKey][0].position)
 	return cost
 
 def manhattenDistance(position, goal):

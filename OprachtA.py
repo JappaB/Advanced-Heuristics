@@ -11,7 +11,7 @@ import random
 from mpl_toolkits.mplot3d import Axes3D
 from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from matplotlib import cm
-fig = plt.figure()
+# fig = plt.figure()
 # ax = fig.add_subplot(111, projection='3d')
 
 
@@ -57,7 +57,7 @@ def main3():
 
 def main():
 	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
-	for board in boardNames[0:1]:
+	for board in boardNames[2:3]:
 		
 
 		walks = {}
@@ -65,7 +65,7 @@ def main():
 		walks['median'] = []
 		walks['solutions'] = []
 		walks['dev'] = []
-		for i in range(200):
+		for i in range(1000):
 			print "walk ", i
 			houseList, batteryList = loadBoard(board)
 			# newCapacities = [505 for x in range(5)]
@@ -82,8 +82,8 @@ def main():
 					counter += 1
 			walks['solutions'].append(counter)
 
-		# with open(board+'cap505dev5_walk.pkl', 'wb') as output:
-		# 	pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
+		with open(board+'walk.pkl', 'wb') as output:
+			pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
 
 		print "board : ", board, "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " mean solutions per walk : ",np.mean(walks['solutions']), " amount of walks without solution : ", walks['solutions'].count(0) , " dev gem ", np.mean(walks['dev'])
 		# print walks
@@ -96,9 +96,9 @@ def main():
 		# ax.plot_surface(X, Y, Z, cmap=cm.coolwarm, linewidth=0, antialiased=False)
 		# plt.show()
 
-		# plt.plot(range(len(walk)),walk)
+		plt.plot(range(len(walk)),walk)
 
-		# plt.show()
+		plt.show()
 
 
 

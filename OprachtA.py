@@ -55,8 +55,8 @@ def main3():
 
 
 
-def main4():
-	boardNames = ["board0", "board1", "board2"]
+def main():
+	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
 	for board in boardNames[0:1]:
 		
 
@@ -65,12 +65,12 @@ def main4():
 		walks['median'] = []
 		walks['solutions'] = []
 		walks['dev'] = []
-		for i in range(100):
+		for i in range(200):
 			print "walk ", i
 			houseList, batteryList = loadBoard(board)
-			newCapacities = [505 for x in range(5)]
-			changeCapacityTo(batteryList, newCapacities)
-			changeDeviation(houseList, 4, 13, 2500)
+			# newCapacities = [505 for x in range(5)]
+			# changeCapacityTo(batteryList, newCapacities)
+			# changeDeviation(houseList, 4, 13, 2500)
 			# a,b,c,walk = hillClimber.hillClimber(100,houseList,batteryList) #
 			walk = randomWalker(houseList, batteryList, 10000)
 			walks['mean'].append(np.mean(walk))
@@ -82,10 +82,10 @@ def main4():
 					counter += 1
 			walks['solutions'].append(counter)
 
-		with open(board+'cap505dev5_walk.pkl', 'wb') as output:
-			pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
+		# with open(board+'cap505dev5_walk.pkl', 'wb') as output:
+		# 	pickle.dump(walks, output, pickle.HIGHEST_PROTOCOL)
 
-		print "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " mean solutions per walk : ",np.mean(walks['solutions']), " amount of walks without solution : ", walks['solutions'].count(0) , " dev gem ", np.mean(walks['dev'])
+		print "board : ", board, "mean ", np.mean(walks['mean']) ," median ", np.mean(walks['median']), " max solutions per walk : ", max(walks['solutions']), " mean solutions per walk : ",np.mean(walks['solutions']), " amount of walks without solution : ", walks['solutions'].count(0) , " dev gem ", np.mean(walks['dev'])
 		# print walks
 		# Z = np.reshape(walk, (1000,1000))
 		# X = np.arange(0, 1000, 1)
@@ -103,8 +103,8 @@ def main4():
 
 
 
-def main():
-	boardNames = ["board0", "board1", "board2", "board3", "board4"]
+def main4():
+	boardNames = ["board0", "board1", "board2"]
 	for board in boardNames[4:5]:
 	# saveBoards(5,50,50,150,5)
 		f = open(board+"board1Jasper_find_sigmoid_stddev_newboard1(fasterdatastructure)-520cap-100it.csv", "w")

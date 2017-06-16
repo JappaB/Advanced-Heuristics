@@ -55,7 +55,7 @@ def main3():
 
 
 
-def main():
+def main4():
 	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
 	for board in boardNames[2:3]:
 		
@@ -161,26 +161,31 @@ def main4():
 
 
 
-def main1():
+def main():
 	# saveBoards(5, 50, 50, 150, 5)
-	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[:1]:
-		f = open(board+"Jasper105-115-40it-sample100cap100_200_300_350_50.csv", "w")
-		for x in range(105,115):
-			for i in range(100):
-				
-				houseList, batteryList = loadBoard(board)
-				changeCapacity(batteryList, x*0.01)
-				start_time = time.time()
-				cost, overCapacity, itt = hillClimber.hillClimber(40, houseList, batteryList )
-				Elapsed = (time.time() - start_time)
-				print "working on #",x, " cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
-				results[0].append(cost)
-				results[1].append(overCapacity)
-				results[2].append(Elapsed)
-				results[3].append(itt)
-			# f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+"\n")
-			f.write(str(np.mean(results[0]))+","+str(np.mean(results[1]))+","+str(np.mean(results[2]))+","+str(np.mean(results[3]))+"\n")
+	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
+	for board in boardNames[:]:
+		f = open(board+"testWithHillclimber1000itt1000exit.csv", "w")
+		f.write("str(cost)+,+str(overCapacity)+,+str(Elapsed)+,+str(itt)+,+str(reset)+\n")
+		# results = [[],[],[],[],[]]
+		for i in range(1000):			
+			houseList, batteryList = loadBoard(board)
+			start_time = time.time()
+			cost, reset, itt = hillClimber.hillClimber(1000, houseList, batteryList )
+			Elapsed = (time.time() - start_time)
+			overCapacity = 0
+			for battery in batteryList:
+				if battery.capacityLeft < 0:
+					overCapacity -= battery.capacityLeft
+			
+			print "working on #",i, " ", board, " || cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+			# results[0].append(cost)
+			# results[1].append(overCapacity)
+			# results[2].append(Elapsed)
+			# results[3].append(itt)
+			# results[4].append(reset)
+			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+","+str(reset)+"\n")
+			# f.write(str(np.mean(results[0]))+","+str(np.mean(results[1]))+","+str(np.mean(results[2]))+","+str(np.mean(results[3]))+","+str(np.mean(results[4]))+"\n")
 
 
 

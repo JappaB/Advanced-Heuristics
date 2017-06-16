@@ -13,12 +13,12 @@ import SolverB
 
 def main():
 	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
-	for board in boardNames[1:2]:
+	for board in boardNames[0:1]:
 		f = open(board+"opdrachtBResults_versie1.csv", "w")
 		capacities = []
 		costs = []
 		comptime = []
-		for n in range(100):
+		for n in range(1):
 			houseList, batteryList = loadBoard(board)
 			totalcap, finalCost, iterations = SolverB.solverB(houseList, batteryList,50,50)
 			capacities.append(totalcap)
@@ -26,13 +26,14 @@ def main():
 			comptime.append(iterations)
 
 			print n, " : ", totalcap, finalCost, iterations
+			f.write(str(totalcap)+","+ str(finalCost)+","+ str(iterations)+"\n")
 
-		plt.plot(range(100),capacities)
-		plt.show()
-		plt.plot(range(100),costs)
-		plt.show()
-		plt.plot(range(100),comptime)
-		plt.show()
+		# plt.plot(range(100),capacities)
+		# plt.show()
+		# plt.plot(range(100),costs)
+		# plt.show()
+		# plt.plot(range(100),comptime)
+		# plt.show()
 
 		plotGrid(houseList, batteryList)
 

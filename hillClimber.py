@@ -17,6 +17,7 @@ def hillClimber(iterations, houseList, batteryList):
 	nothingChanged = 0
 
 	iterating = 0
+	reset = 0
 
 	while(nothingChanged < iterations):
 
@@ -91,14 +92,14 @@ def hillClimber(iterations, houseList, batteryList):
 				else:
 					swap(battery1, battery2, house1, house2)
 			else:
+				reset += 1
 				nothingChanged = 0
 
 
 	for battery in batteryList:
 		battery.update()
-	totalOvercap = totalOvercapacity(batteryList)
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), totalOvercap, iterating
+	return min(costAfter,costBefore), reset, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery

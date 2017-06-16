@@ -105,9 +105,9 @@ def main4():
 
 def main():
 	boardNames = ["board0", "board1", "board2", "board3", "board4"]
-	for board in boardNames[3:4]:
+	for board in boardNames[4:5]:
 	# saveBoards(5,50,50,150,5)
-		f = open(board+"board1Jasper_find_sigmoid_stddev_newboard1(fasterdatastructure)-510cap-100it.csv", "w")
+		f = open(board+"board1Jasper_find_sigmoid_stddev_newboard1(fasterdatastructure)-520cap-100it.csv", "w")
 		results2 = []
 		for x in range(1,24):
 			results1 = [[],[],[]]
@@ -115,7 +115,7 @@ def main():
 			for i in range(100):
 				start_time = time.time()
 				deviation = x*0.5
-				newCapacities = [510,510,510,510,510]
+				newCapacities = [520,520,520,520,520]
 				houseList, batteryList = loadBoard(board)
 				changeCapacityTo(batteryList, newCapacities)
 				# changeCapacity(batteryList, newCapacities)

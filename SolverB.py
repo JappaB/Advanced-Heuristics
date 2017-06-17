@@ -63,9 +63,9 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			
 			# save wether the battery moved since last time
 			if (tuple(battery.position) == oldPosition):
-				changedlist.append(True)
-			else:
 				changedlist.append(False)
+			else:
+				changedlist.append(True)
 
 		# stop if no battery changed
 		if (all(i == True for i in changedlist)):

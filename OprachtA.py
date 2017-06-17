@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import hillClimber
+import hillClimberB as hillClimber
 from random import randint
 import matplotlib.pyplot as plt
 import time
@@ -103,88 +103,125 @@ def main4():
 
 
 
-def main4():
-	boardNames = ["board0", "board1", "board2"]
-	for board in boardNames[4:5]:
-	# saveBoards(5,50,50,150,5)
-		f = open(board+"board1Jasper_find_sigmoid_stddev_newboard1(fasterdatastructure)-520cap-100it.csv", "w")
-		results2 = []
-		for x in range(1,24):
-			results1 = [[],[],[]]
-			temp = 0
-			for i in range(100):
-				start_time = time.time()
-				deviation = x*0.5
-				newCapacities = [520,520,520,520,520]
-				houseList, batteryList = loadBoard(board)
-				changeCapacityTo(batteryList, newCapacities)
-				# changeCapacity(batteryList, newCapacities)
-				changeDeviation(houseList, deviation, 13, 2500)
-
-				cost, overCapacity, itt = hillClimber.hillClimber(100, houseList, batteryList )
-				results1[0].append(cost)
-				results1[1].append(overCapacity)
-				results1[2].append(itt)
-				solveableCheck = True
-				for battery in batteryList:
-					if (battery.overCapacitated == True):
-						solveableCheck = False
-
-				# for battery in batteryList:
-				# 	print battery.capacityLeft
-				# 	print battery.capacity
-				# 	print battery.overCapacitated
-				# 	print ""
-
-				# print overCapacity
-
-				# return
-
-
-				if solveableCheck:
-					temp += 1
-
-				Elapsed = (time.time() - start_time)
-				print "working on #",str(x/2.0), "% cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed, " solveable : ", solveableCheck
-
-			results2.append(temp)
-			print "percentage : ", temp, "%"
-
-			f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(temp)+"\n")
-		
-		print results2
-		plt.plot(range(len(results2)),results2)
-		plt.show()
-
-
-
-
-
-
 def main():
+	boardNames = ["board0", "board1", "board2","board3","board4"]
+	for board in boardNames[:]:
+	# saveBoards(5,50,50,150,5)
+
+
+		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
+		ITERATIONS = 150
+		EXITHC = 1000
+		CHANGECAPACITYFACTOROFBATTERIES = 0.025
+
+		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
+		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
+
+		for i in range(1,8):
+			BatteryCaps = 500*(1+(CHANGECAPACITYFACTOROFBATTERIES*i/5))
+			f = open(board+"NewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
+			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
+			results2 = []
+
+			for x in range(1,24):
+
+				results1 = [[],[],[],[]]
+				solved = 0
+				for i in range(ITERATIONS):
+
+					deviation = x*0.5
+					newCapacities = [BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps]
+					houseList, batteryList = loadBoard(board)
+					changeCapacityTo(batteryList, newCapacities)
+					changeDeviation(houseList, deviation, 13, 2500)
+
+					## Ik dacht dat we misschien huizen maakten met negatieve output door die standaardeviatie, maar is als het goed is niet zo##
+					# HouseCounter =0
+					# WrongHouseCap = []
+					# for house in houseList:
+					# 	if house.netto <= 0:
+					# 		HouseCounter += 1
+					# 		WrongHouseCap.append(house.netto)
+
+					start_time = time.time()
+					cost, reset, itt = hillClimber.hillClimber(EXITHC, houseList, batteryList)
+					TimeInHC = (time.time() - start_time)
+					results1[0].append(cost)
+					results1[1].append(reset)
+					results1[2].append(itt)
+					results1[3].append(TimeInHC)
+					solveableCheck = True
+					for battery in batteryList:
+						if (battery.overCapacitated == True):
+							solveableCheck = False
+
+					# for battery in batteryList:
+					# 	print battery.capacityLeft
+					# 	print battery.capacity
+					# 	print battery.overCapacitated
+					# 	print ""
+
+					# print overCapacity
+
+					# return
+
+
+					if solveableCheck:
+						solved += 1
+
+
+					print "Working on: ",board," cap: ",BatteryCaps," with std dev output: ",str(x/2.0), "% c ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",i+1
+
+				results2.append(solved)
+				print "percentage : ", solved, "%"
+
+				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+str(results1[3])+"\n")
+			
+			print results2
+			# plt.plot(range(len(results2)),results2)
+			# plt.show()
+
+
+
+
+
+
+def mainx():
 	# saveBoards(5, 50, 50, 150, 5)
 	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
-	for board in boardNames[:]:
-		f = open(board+"testWithHillclimber1000itt1000exit.csv", "w")
+	for board in boardNames[1:3]:
+		f = open(board+"JaspertestWithHillclimber100itt200exit.csv", "w")
 		f.write("str(cost)+,+str(overCapacity)+,+str(Elapsed)+,+str(itt)+,+str(reset)+\n")
 		# results = [[],[],[],[],[]]
-		for i in range(1000):			
+		for i in range(250):			
 			houseList, batteryList = loadBoard(board)
 			start_time = time.time()
-			cost, reset, itt = hillClimber.hillClimber(1000, houseList, batteryList )
+			cost, reset, itt = hillClimber.hillClimber(200, houseList, batteryList )
 			Elapsed = (time.time() - start_time)
-			overCapacity = 0
+			overCapacitatedAll = False
+
 			for battery in batteryList:
-				if battery.capacityLeft < 0:
-					overCapacity -= battery.capacityLeft
+				if battery.overCapacitated == True:
+					overCapacitatedAll = True
+				# print battery.capacity
+
+			# check = 0
+			# for j in range(len(houseList)):
+			# 	# check.append(0)
+			# 	house = houseList[j]
+			# 	for battery in batteryList:
+			# 		if (battery.assignedHouses[house.name][1]):
+			# 			check += battery.assignedHouses[house.name][0].netto
+
+			# print "before ", check
 			
-			print "working on #",i, " ", board, " || cost : ", cost, " overCapacity : ", overCapacity, " iterations : ", itt, " in ", Elapsed
+			print "working on #",i, " ", board, " || cost : ", cost, " overCapacity : ", overCapacitatedAll, " iterations : ", itt, " in ", Elapsed
 			# results[0].append(cost)
 			# results[1].append(overCapacity)
 			# results[2].append(Elapsed)
 			# results[3].append(itt)
 			# results[4].append(reset)
-			f.write(str(cost)+","+str(overCapacity)+","+str(Elapsed)+","+str(itt)+","+str(reset)+"\n")
+			f.write(str(cost)+","+str(overCapacitatedAll)+","+str(Elapsed)+","+str(itt)+","+str(reset)+"\n")
 			# f.write(str(np.mean(results[0]))+","+str(np.mean(results[1]))+","+str(np.mean(results[2]))+","+str(np.mean(results[3]))+","+str(np.mean(results[4]))+"\n")
 
 

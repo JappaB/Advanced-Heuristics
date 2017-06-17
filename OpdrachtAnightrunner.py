@@ -187,8 +187,6 @@ def main():
 
 
 def mainx():
-	# saveBoards(5, 50, 50, 150, 5)
-	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
 
 	for board in boardNames[:]:
 		f = open(board+"testaftermajorbug.csv", "w")

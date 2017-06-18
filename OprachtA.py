@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import hillClimberB as hillClimber
+import hillClimber as hillClimber
 from random import randint
 import matplotlib.pyplot as plt
 import time
@@ -119,7 +119,7 @@ def main():
 
 		for i in range(1,8):
 			BatteryCaps = 500*(1+(CHANGECAPACITYFACTOROFBATTERIES*i/5))
-			f = open(board+"NewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
+			f = open(board+"REALNewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
 			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
 			results2 = []
 

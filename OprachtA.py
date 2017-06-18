@@ -17,10 +17,10 @@ from matplotlib import cm
 
 # batteryPositionList = [10,10],[40,40],[25,25],[10,40],[40,10]
 
-capacityListOriginal = [100,200,300,350,50]
-capacityList = capacityListOriginal
+# capacityListOriginal = [100,200,300,350,50]
+# capacityList = capacityListOriginal
 
-totalCapacity = 1000
+# totalCapacity = 1000
 
 
 def main3():
@@ -105,43 +105,57 @@ def main4():
 
 def main():
 	boardNames = ["board0", "board1", "board2","board3","board4"]
-	for board in boardNames[:]:
+	for board in boardNames[2:3]:
 	# saveBoards(5,50,50,150,5)
 
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
-		ITERATIONS = 150
+		ITERATIONS = 100
 		EXITHC = 1000
-		CHANGECAPACITYFACTOROFBATTERIES = 0.025
+		CHANGECAPACITYFACTOROFBATTERIES = 0.0005
+		MEDIANOUTPUT = 50
+		BATTERYCUMCAP = (150 * MEDIANOUTPUT) #aantal huizen * output per huis
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
 
-		for i in range(1,8):
-			BatteryCaps = 500*(1+(CHANGECAPACITYFACTOROFBATTERIES*i/5))
-			f = open(board+"REALNewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
+		for i in range(21,23):
+			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
+			f = open(board+"Test2REAL.NewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
 			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
 			results2 = []
 
-			for x in range(1,24):
+			for x in range(1,9):
 
 				results1 = [[],[],[],[]]
 				solved = 0
 				for i in range(ITERATIONS):
 
-					deviation = x*0.5
+					deviation = x*5
 					newCapacities = [BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps]
 					houseList, batteryList = loadBoard(board)
 					changeCapacityTo(batteryList, newCapacities)
-					changeDeviation(houseList, deviation, 13, 2500)
+					changeDeviation(houseList, deviation, MEDIANOUTPUT, BATTERYCUMCAP)
 
-					## Ik dacht dat we misschien huizen maakten met negatieve output door die standaardeviatie, maar is als het goed is niet zo##
+					# Ik dacht dat we misschien huizen maakten met negatieve output door die standaardeviatie, maar is als het goed is niet zo##
 					# HouseCounter =0
 					# WrongHouseCap = []
 					# for house in houseList:
 					# 	if house.netto <= 0:
 					# 		HouseCounter += 1
 					# 		WrongHouseCap.append(house.netto)
+
+					# print WrongHouseCap
+
+					check = []
+					# for i in range(len(houseList)):
+					# 	check.append(0)
+					# 	house = houseList[i]
+					# 	for battery in batteryList:
+					# 		if (battery.assignedHouses[house.name][1]):
+					# 			check[i] += 1
+
+					# print "before ", check.count(1)					
 
 					start_time = time.time()
 					cost, reset, itt = hillClimber.hillClimber(EXITHC, houseList, batteryList)
@@ -170,10 +184,10 @@ def main():
 						solved += 1
 
 
-					print "Working on: ",board," cap: ",BatteryCaps," with std dev output: ",str(x/2.0), "% c ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",i+1
+					print "Working on: ",board," cap: ",BatteryCaps," with deviation output: ",str(deviation), " ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",i+1
 
 				results2.append(solved)
-				print "percentage : ", solved, "%"
+				print "percentage : ", float(solved/ITERATIONS*100), "%"
 
 				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+str(results1[3])+"\n")
 			

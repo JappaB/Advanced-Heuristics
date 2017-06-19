@@ -105,15 +105,15 @@ def main4():
 
 def main():
 	boardNames = ["board0", "board1", "board2","board3","board4"]
-	for board in boardNames[2:3]:
+	for board in boardNames[0:1]:
 	# saveBoards(5,50,50,150,5)
 
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
-		ITERATIONS = 100
+		ITERATIONS = 20
 		EXITHC = 1000
 		CHANGECAPACITYFACTOROFBATTERIES = 0.0005
-		MEDIANOUTPUT = 50
+		MEDIANOUTPUT = 51
 		BATTERYCUMCAP = (150 * MEDIANOUTPUT) #aantal huizen * output per huis
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
@@ -125,11 +125,11 @@ def main():
 			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
 			results2 = []
 
-			for x in range(1,9):
+			for x in range(10,11):
 
 				results1 = [[],[],[],[]]
 				solved = 0
-				for i in range(ITERATIONS):
+				for j in range(ITERATIONS):
 
 					deviation = x*5
 					newCapacities = [BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps,BatteryCaps]
@@ -184,12 +184,12 @@ def main():
 						solved += 1
 
 
-					print "Working on: ",board," cap: ",BatteryCaps," with deviation output: ",str(deviation), " ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",i+1
+					print "Working on: ",board," cap: ",BatteryCaps," with deviation output: ",str(deviation), " ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",j+1
 
 				results2.append(solved)
 				print "percentage : ", float(solved/ITERATIONS*100), "%"
 
-				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+str(results1[3])+"\n")
+				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+"\n")
 			
 			print results2
 			# plt.plot(range(len(results2)),results2)

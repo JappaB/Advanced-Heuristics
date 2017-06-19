@@ -40,25 +40,25 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		a,b, itt = hill.hillClimber(1000, houseList, batteryList)
 
 		
-		# iterations += 1 + itt
-		# # print iterations
-		# changedlist = []
-		# for battery in batteryList:
-		# 	# save old location
-		# 	oldPosition = tuple(battery.position)
-		# 	# print "oldposition", oldPosition
+		iterations += 1 + itt
+		# print iterations
+		changedlist = []
+		for battery in batteryList:
+			# save old location
+			oldPosition = tuple(battery.position)
+			# print "oldposition", oldPosition
 			
-		# 	# initiate values for new battery-position
-		# 	n = 0
-		# 	positionSum = np.array([0,0])
+			# initiate values for new battery-position
+			n = 0
+			positionSum = np.array([0,0])
 
-		# 	# check per house if it is assignet to current battery
-		# 	for houseKey in battery.assignedHouses:
-		# 		# if so, count its position in
-		# 		if (battery.assignedHouses[houseKey][1]):
-		# 			n += 1
-		# 			positionSum += battery.assignedHouses[houseKey][0].position
-		# 	battery.position = list(positionSum/n)
+			# check per house if it is assignet to current battery
+			for houseKey in battery.assignedHouses:
+				# if so, count its position in
+				if (battery.assignedHouses[houseKey][1]):
+					n += 1
+					positionSum += battery.assignedHouses[houseKey][0].position
+			battery.position = list(positionSum/n)
 
 		# 	# print "newposition", battery.position
 
@@ -72,15 +72,15 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		if (all(i == True for i in changedlist)):
 			somethingChanged = False
 
-		# 	# save wether the battery moved since last time
-		# 	if (tuple(battery.position) == oldPosition):
-		# 		changedlist.append(True)
-		# 	else:
-		# 		changedlist.append(False)
+			# save wether the battery moved since last time
+			if (tuple(battery.position) == oldPosition):
+				changedlist.append(True)
+			else:
+				changedlist.append(False)
 
-		# # stop if no battery changed
-		# if (all(i == True for i in changedlist)):
-		somethingChanged = False
+		# stop if no battery changed
+		if (all(i == True for i in changedlist)):
+			somethingChanged = False
 
 	totalcap = 0
 	for battery in batteryList:

@@ -14,6 +14,8 @@ from matplotlib import cm
 from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.cbook import get_sample_data
 import Plotter
+import BoardBuilder
+builder = BoardBuilder.boardBuilder()
 plot = Plotter.plotter()
 
 

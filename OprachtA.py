@@ -118,11 +118,11 @@ def main():
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
-
-		for i in range(1,8):
+		f = open(board+"pres45 - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - .csv", "w")
+		f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
+		for i in range(1,10):
 			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
-			f = open(board+"monday morningtun - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
-			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
+			
 			results2 = []
 
 			for x in range(9,10):
@@ -137,11 +137,7 @@ def main():
 					changeCapacityTo(batteryList, newCapacities)
 					changeDeviation(houseList, deviation, MEDIANOUTPUT, BATTERYCUMCAP)
 
-					for house in houseList:
-						print house.netto
 
-					for battery in batteryList:
-						print battery.capacity
 
 					# Ik dacht dat we misschien huizen maakten met negatieve output door die standaardeviatie, maar is als het goed is niet zo##
 					# HouseCounter =0
@@ -154,6 +150,14 @@ def main():
 					# print WrongHouseCap
 
 					check = []
+					total  = 0
+					for house in houseList:
+						total += house.netto
+
+					print total, "found total in houses"
+					print sum(newCapacities), "found total in batteries"
+
+
 					# for i in range(len(houseList)):
 					# 	check.append(0)
 					# 	house = houseList[i]
@@ -173,7 +177,10 @@ def main():
 					solveableCheck = True
 					for battery in batteryList:
 						if (battery.overCapacitated == True):
+							print battery.overCapacitated
 							solveableCheck = False
+
+
 
 					# for battery in batteryList:
 					# 	print battery.capacityLeft
@@ -193,7 +200,7 @@ def main():
 					print "Working on: ",board," cap: ",BatteryCaps," with deviation output: ",str(deviation), " ||cost : ", cost, " Resets : ", reset, " iterations : ", itt, " in ", TimeInHC, " solveable : ", solved,"/",j+1
 
 				results2.append(solved)
-				print "percentage : ", float(solved/ITERATIONS*100), "%"
+				print "percentage : ", float((solved/ITERATIONS)*100.0), "%"
 
 				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+"\n")
 			

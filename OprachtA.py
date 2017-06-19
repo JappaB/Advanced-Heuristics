@@ -110,22 +110,22 @@ def main():
 
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
-		ITERATIONS = 20
+		ITERATIONS = 100
 		EXITHC = 1000
 		CHANGECAPACITYFACTOROFBATTERIES = 0.0005
-		MEDIANOUTPUT = 51
+		MEDIANOUTPUT = 50
 		BATTERYCUMCAP = (150 * MEDIANOUTPUT) #aantal huizen * output per huis
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
 
-		for i in range(21,23):
+		for i in range(1,8):
 			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
-			f = open(board+"Test2REAL.NewHC-iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
+			f = open(board+"monday morningtun - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - "+str(BatteryCaps)+".csv", "w")
 			f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
 			results2 = []
 
-			for x in range(10,11):
+			for x in range(9,10):
 
 				results1 = [[],[],[],[]]
 				solved = 0
@@ -136,6 +136,12 @@ def main():
 					houseList, batteryList = loadBoard(board)
 					changeCapacityTo(batteryList, newCapacities)
 					changeDeviation(houseList, deviation, MEDIANOUTPUT, BATTERYCUMCAP)
+
+					for house in houseList:
+						print house.netto
+
+					for battery in batteryList:
+						print battery.capacity
 
 					# Ik dacht dat we misschien huizen maakten met negatieve output door die standaardeviatie, maar is als het goed is niet zo##
 					# HouseCounter =0

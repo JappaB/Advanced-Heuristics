@@ -118,14 +118,14 @@ def main():
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
-		f = open(board+"pres45 - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - .csv", "w")
+		f = open(board+"pres15 - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - .csv", "w")
 		f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
 		for i in range(1,10):
 			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
 			
 			results2 = []
 
-			for x in range(9,10):
+			for x in range(3,4):
 
 				results1 = [[],[],[],[]]
 				solved = 0
@@ -149,13 +149,13 @@ def main():
 
 					# print WrongHouseCap
 
-					check = []
-					total  = 0
-					for house in houseList:
-						total += house.netto
+					# check = []
+					# total  = 0
+					# for house in houseList:
+					# 	total += house.netto
 
-					print total, "found total in houses"
-					print sum(newCapacities), "found total in batteries"
+					# print total, "found total in houses"
+					# print sum(newCapacities), "found total in batteries"
 
 
 					# for i in range(len(houseList)):

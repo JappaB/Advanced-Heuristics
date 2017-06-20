@@ -21,7 +21,7 @@ plot = Plotter.plotter()
 
 def main():
 	boardNames = ["board0", "board1", "board2","board3","board4"]
-	for board in boardNames[3:4]:
+	for board in boardNames[2:4]:
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
 		ITERATIONS = 100
@@ -32,9 +32,9 @@ def main():
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
-		f = open(board+"pres50_1-10cap - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -batteryCaps - .csv", "w")
+		f = open(board+"Final results- "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" - allemaal batteryCaps en st devs -.csv", "w")
 		f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
-		for i in range(1,10):
+		for i in range(1,25):
 			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
 			
 			results2 = []
@@ -61,7 +61,7 @@ def main():
 					solveableCheck = True
 					for battery in batteryList:
 						if (battery.overCapacitated == True):
-							print battery.overCapacitated
+							# print battery.overCapacitated
 							solveableCheck = False
 
 					if solveableCheck:
@@ -79,7 +79,7 @@ def main():
 
 
 
-def loadBoard(self, boardName):
+def loadBoard(boardName):
 	""" loads board with name """
 
 	with open(boardName+'.pkl', 'rb') as input:

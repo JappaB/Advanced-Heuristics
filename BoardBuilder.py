@@ -1,4 +1,3 @@
-
 import pickle
 import solarHouse
 import Battery
@@ -22,19 +21,19 @@ class boardBuilder:
 
 
 	def saveBoard(self, houseList, batteryList, boardName, width, height):
-	""" saves board with name """
+		""" saves board with name """
 
-	board = Board.board()
-	board.batteryList = batteryList
-	board.houseList = houseList
-	board.height = height
-	board.width = width
-	board.n_houses = len(houseList)
-	board.n_batteries = len(batteryList)
-	with open(boardName+'.pkl', 'wb') as output:
-		pickle.dump(board, output, pickle.HIGHEST_PROTOCOL)
-		# pickle.dump(batteryList, output, pickle.HIGHEST_PROTOCOL)
-	return True
+		board = Board.board()
+		board.batteryList = batteryList
+		board.houseList = houseList
+		board.height = height
+		board.width = width
+		board.n_houses = len(houseList)
+		board.n_batteries = len(batteryList)
+		with open(boardName+'.pkl', 'wb') as output:
+			pickle.dump(board, output, pickle.HIGHEST_PROTOCOL)
+			# pickle.dump(batteryList, output, pickle.HIGHEST_PROTOCOL)
+		return True
 
 	def loadBoard(self, boardName):
 		""" loads board with name """

@@ -1,7 +1,7 @@
 import random
 import Battery
 
-def hillClimberB(iterations, houseList, batteryList, wireCost, batteryCost):
+def hillClimberB(iterations, houseList, batteryList, wireCost):
 
 
 	# Battery.batteryInformation(True,0,batteryList)
@@ -45,17 +45,10 @@ def hillClimberB(iterations, houseList, batteryList, wireCost, batteryCost):
 		
 
 		
-		# before swap calculations
-
-		Wirelength = 0
-		for house in houseList:
-			position = house.position
-			battery = house.batteryAssignment
-			wirelength += manhattenDistance(position, goal):
+		# before swap calculations of the wireCost
+		totalWireCost = totalWireCostBefore(wireCost,houseList)
 
 
-
-		Batterycosts = 
 		overCapacityBefore = 0
 		if (battery1.overCapacitated): 
 			overCapacityBefore -= ( battery1.capacityLeft)
@@ -152,3 +145,29 @@ def manhattenDistance(position, goal):
 	""" calculates the minimal length of the wire from base to goal """
 
 	return sum(abs(a-b) for a,b in zip(position,goal))
+
+def totalWireCostBefore(wireCost,houseList):
+	"""Calculates total wirecost for before"""
+	wireLength = 0
+		for house in houseList:
+			position = house.position
+			battery = house.batteryAssignment
+			goal = battery.position
+			wireLength += manhattenDistance(position, goal)
+
+		totalWireCost = wireLength*wireCost
+		return totalWireCost
+
+def totalWireCostAfter(totalWireCostBefore, house1, house2):
+
+	totalWireCost = totalWireCostBefore
+
+	#new distance house 1
+	position1 = house.position
+	battery1 = house.batteryAssignment
+	goal1 = battery.position
+	wireLength1 = manhattenDistance(position, goal)
+
+	#new distance house 2
+
+

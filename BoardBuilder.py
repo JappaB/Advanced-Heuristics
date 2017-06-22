@@ -93,6 +93,29 @@ class boardBuilder:
 		return houseList, batteryList
 
 
+def main():
+	boardNames = ["board0", "board1", "board2","board3","board4"]
+	newnames = ["finalBoard0", "finalBoard1", "finalBoard2"]
+	deviations = [1,2,3]
+	capacities = [1,2,3]
+	MEDIANOUTPUT = 50
+	BATTERYCUMCAP = (150 * MEDIANOUTPUT)
+	i = 0
+	for board in boardNames[:3]:
+		houseList, batteryList = loadBoard(board)
+		capacityNow = [capacities[i] for x in range(len(batteryList))]
+		changeCapacityTo(batteryList, capacityNow)
+		changeDeviation(houseList, deviations[i], MEDIANOUTPUT, BATTERYCUMCAP)
+
+		# print capacityNow, deviations[i], newnames[i]
+
+		builder.saveBoard(houseList, batteryList, newnames[i], 50, 50)
+
+
+		i += 1
+
+
+
 
 # def main3():
 # 	saveBoards(3,50,50,150,5)

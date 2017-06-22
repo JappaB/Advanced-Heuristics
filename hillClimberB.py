@@ -1,5 +1,6 @@
 import random
 import Battery
+# import 
 
 def hillClimber(iterations, houseList, batteryList):
 
@@ -12,24 +13,24 @@ def hillClimber(iterations, houseList, batteryList):
 	while(nothingChanged < iterations):
 		# print nothingChanged
 
-		print "\n",cost(batteryList, houseList), cost2(batteryList, houseList), "n"
+		# print "\n",cost(batteryList, houseList), cost2(batteryList, houseList), "\n"
 
 		iterating += 1
 		
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
 		house2 = random.choice(houseList)
-		battery1 = house1.batteryAssignment
-		battery2 = house2.batteryAssignment
+		# battery1 = house1.batteryAssignment
+		# battery2 = house2.batteryAssignment
 
 		# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber
 		# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber
 		# # Check to which battery the houses are linked
-		# for battery in batteryList:
-		# 	if battery.assignedHouses[house1.name][1]:
-		# 		battery1 = battery
-		# 	if battery.assignedHouses[house2.name][1]:
-		# 		battery2 = battery
+		for battery in batteryList:
+			if battery.assignedHouses[house1.name][1]:
+				battery1 = battery
+			if battery.assignedHouses[house2.name][1]:
+				battery2 = battery
 
 		# Update current capacity used for each battery
 		# try:
@@ -107,14 +108,15 @@ def swap(battery1, battery2, house1, house2):
 	# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber, battery1.assignedHouses[house1.name][1] ,battery1.assignedHouses[house2.name][1]
 	# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber, battery2.assignedHouses[house1.name][1] ,battery2.assignedHouses[house2.name][1]
 
-	house1.batteryAssignment = battery2
-	house2.batteryAssignment = battery1
+	
 
 
 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
 	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
 	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	house1.batteryAssignment = battery2
+	house2.batteryAssignment = battery1
 	# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber, battery1.assignedHouses[house1.name][1] ,battery1.assignedHouses[house2.name][1]
 	# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber, battery2.assignedHouses[house1.name][1] ,battery2.assignedHouses[house2.name][1]
 
@@ -158,17 +160,15 @@ def cost(batteryList, houseList):
 		position = house.position 
 		goal = house.batteryAssignment.position
 		wireLength += manhattenDistance(position, goal)
-
-	# print wireLength
 	return wireLength
 
-def wireDifference(distanceBefore, housesNow):
-	cost = 0
-	for house in housesNow: #new distance house 1
-		position = house.position 
-		goal = house.batteryAssignment.position
-		cost += manhattenDistance(position, goal)
-	costDifference = cost - distanceBefore
-	return costDifference
+# def wireDifference(distanceBefore, housesNow):
+# 	cost = 0
+# 	for house in housesNow: #new distance house 1
+# 		position = house.position 
+# 		goal = house.batteryAssignment.position
+# 		cost += manhattenDistance(position, goal)
+# 	costDifference = cost - distanceBefore
+# 	return costDifference
 
 

@@ -34,8 +34,8 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 	Wirecost = 0
 	cap = 1
 	while(cap > 0):
-		cap, Wirecost, itt = solverB.solverB()
-	costBefore = batteryCost + wireCosts
+		cap, wireLength, itt = solverB.solverB()
+	costBefore = batteryCost + wireLength*wireCost
 
 	# do until converge
 	nothingChanged = 0
@@ -55,7 +55,7 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 		else:
 			# add
 			batteryConfiguration.append(random.choice(batteryOptions))
-			
+
 		# if capacity is too high or low try something else
 		if((sum(batteryConfiguration)>(totalCapacity*1.13)) and (sum(batteryConfiguration)<=(totalCapacity))):
 			batteryConfiguration = oldConfiguration
@@ -71,9 +71,9 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 		# calculate cost after
 		wireCosts = []
 		for x in range(100):
-			cap, Wirecost, itt = solverB.solverB()
+			cap, wireLength, itt = solverB.solverB(houseList, batteryList,50,50)
 			if (cap == 0):
-				wireCosts.append(Wirecost)
+				wireCosts.append(wireLength*wireCost)
 		batteryCost = 0
 		for i in range(len(batteryOptions)):
 			batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]

@@ -1,58 +1,44 @@
 import random
 import Battery
 
-def hillClimberB(iterations, houseList, batteryList, wireCost):
+def hillClimber(iterations, houseList, batteryList):
 
-
-	# Battery.batteryInformation(True,0,batteryList)
-
-	n_batteries = len(batteryList)
-	wireCost = 1
-	batteryCost = 100
+	print "running hillclimber b"
 
 	nothingChanged = 0
-
 	iterating = 0
 	reset = 0
 
 	while(nothingChanged < iterations):
+		# print nothingChanged
 
+		# print "\n",cost(batteryList, houseList), cost2(batteryList, houseList), "\n"
 
 		iterating += 1
 		
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
 		house2 = random.choice(houseList)
-		battery1 = 0
-		battery2 = 0
-		#overcapacitated or not
+		battery1 = house1.batteryAssignment
+		battery2 = house2.batteryAssignment
 
-		# Check to which battery the houses are linked
-		for battery in batteryList:
-			# print battery.assignedHouses[house1.name]
-			# print battery.assignedHouses[house2.name], "\n"
-			if battery.assignedHouses[house1.name][1]:
-				battery1 = battery
-				# print battery1.batteryNumber
-			if battery.assignedHouses[house2.name][1]:
-				battery2 = battery
-				# print battery2.batteryNumber
-
-
-		#safe before positions to make the calculation of change in wirecost after easier
-		house1PositionBefore=house1.position
-		house2PostionBefore=house2.position
+		# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber
+		# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber
+		# # Check to which battery the houses are linked
+		# for battery in batteryList:
+		# 	if battery.assignedHouses[house1.name][1]:
+		# 		battery1 = battery
+		# 	if battery.assignedHouses[house2.name][1]:
+		# 		battery2 = battery
 
 		# Update current capacity used for each battery
 		# try:
 		battery1.update()
 		battery2.update()
-		
 
-		
 		# before swap calculations of the wireCost
-		totalWireCost = totalWireCostBefore(wireCost,houseList)
-
+		costBefore = cost2(batteryList,houseList)
+		# two_housesBefore = wireDifference(0, [house1,house2])
 
 		overCapacityBefore = 0
 		if (battery1.overCapacitated): 
@@ -94,7 +80,7 @@ def hillClimberB(iterations, houseList, batteryList, wireCost):
 			nothingChanged += 1
 			costAfter = costBefore
 		else:
-			costAfter = cost(batteryList, houseList, wireCost, batteryCost)
+			costAfter = cost2(batteryList,houseList)
 			if (costBefore <= costAfter):
 			# Swap back
 				nothingChanged += 1
@@ -104,46 +90,61 @@ def hillClimberB(iterations, houseList, batteryList, wireCost):
 					swap(battery1, battery2, house1, house2)
 			else:
 				reset += 1
+				print reset
 				nothingChanged = 0
+		
 
 
 	for battery in batteryList:
 		battery.update()
 	# return final cost, hoe veel overcapaciteit er nog is
-	return cost(batteryList, houseList, wireCost, batteryCost), reset, iterating
+	return cost(batteryList, houseList), reset, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery
 	# swapBool =random.choice([0, 1])
 
+	# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber, battery1.assignedHouses[house1.name][1] ,battery1.assignedHouses[house2.name][1]
+	# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber, battery2.assignedHouses[house1.name][1] ,battery2.assignedHouses[house2.name][1]
+
+	
+
+
 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
 	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
 	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
+	house1.batteryAssignment = battery2
+	house2.batteryAssignment = battery1
+	# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber, battery1.assignedHouses[house1.name][1] ,battery1.assignedHouses[house2.name][1]
+	# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber, battery2.assignedHouses[house1.name][1] ,battery2.assignedHouses[house2.name][1]
+
+	# return ""+3
+	
 
 
 def assignment(battery1, battery2, house1):
 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
+	house1.batteryAssignment = battery2
 
 
-def totalOvercapacity(batteryList):
-	overcap = 0
+# def totalOvercapacity(batteryList):
+# 	overcap = 0
 
-	for i in range (len(batteryList)):
-		overcap += batteryList[i].capacityLeft
+# 	for i in range (len(batteryList)):
+# 		overcap += batteryList[i].capacityLeft
 
-	return -overcap
+# 	return -overcap
 
-def cost(batteryList, houseList, wireCost, batteryCost):
+def cost2(batteryList, houseList):
 	""" calculates the cost of a setup of batteries and houses """
 
 	cost = 0
-	# cost += len(batteryList)*batteryCost
 	for battery in batteryList:
 		for houseKey in battery.assignedHouses:
 			if (battery.assignedHouses[houseKey][1]):
-				cost += battery.assignedHouses[houseKey][2]
+				cost += manhattenDistance(battery.assignedHouses[houseKey][0].position,battery.position)
 	return cost
 
 def manhattenDistance(position, goal):
@@ -151,28 +152,20 @@ def manhattenDistance(position, goal):
 
 	return sum(abs(a-b) for a,b in zip(position,goal))
 
-def totalWireCostBefore(wireCost,houseList):
+def cost(batteryList, houseList):
 	"""Calculates total wirecost for before"""
 	wireLength = 0
-		for house in houseList:
-			position = house.position
-			battery = house.batteryAssignment
-			goal = battery.position
-			wireLength += manhattenDistance(position, goal)
+	for house in houseList:
+		position = house.position 
+		goal = house.batteryAssignment.position
+		wireLength += manhattenDistance(position, goal)
+	return wireLength
 
-		totalWireCost = wireLength*wireCost
-		return totalWireCost
-
-def totalWireCostAfter(totalWireCostBefore, house1, house2,house1PositionBefore,house2PostionBefore):
-
-	totalWireCost = totalWireCostBefore
-
-	#new distance house 1
-	position1 = house.position
-	battery1 = house.batteryAssignment
-	goal1 = battery.position
-	wireLength1 = manhattenDistance(position, goal)
-
-	#new distance house 2
-
-
+# def wireDifference(distanceBefore, housesNow):
+# 	cost = 0
+# 	for house in housesNow: #new distance house 1
+# 		position = house.position 
+# 		goal = house.batteryAssignment.position
+# 		cost += manhattenDistance(position, goal)
+# 	costDifference = cost - distanceBefore
+# 	return costDifference

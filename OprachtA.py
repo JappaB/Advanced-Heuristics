@@ -19,27 +19,84 @@ builder = BoardBuilder.boardBuilder()
 plot = Plotter.plotter()
 
 
+def main5():
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+	for board in boardNames:
+		f = open(board+"_1000randomwalksof50000.csv", "w")
+		f.write("medianCap,meanCap,maxiCap,miniCap,devCap,mediancost,meancost,maxicost,minicost,devcost,solutions\n")
+		start_time = time.time()
+		for x in range(1000):
+			houseList, batteryList = loadBoard(board)
+			capList, costList = randomWalker(houseList, batteryList, 10000)
+			medianCap = np.median(capList)
+			meanCap = np.mean(capList)
+			maxiCap = np.max(capList)
+			miniCap = np.min(capList)
+			devCap = np.std(capList)
+			solutions = capList.count(0)
+			mediancost = np.median(costList)
+			meancost = np.mean(costList)
+			maxicost = np.max(costList)
+			minicost = np.min(costList)
+			devcost = np.std(costList)
+			resultList = [medianCap,meanCap,maxiCap,miniCap,devCap,mediancost,meancost,maxicost,minicost,devcost,solutions]
+			print board, " iteratie ",x, " : ", resultList
+			writeString = ""
+			for result in resultList:
+				writeString = writeString+str(result)+","
+			writeString = writeString+"\n"
+			f.write(writeString)
+
+		print (time.time() - start_time)
+
+
 def main():
-	boardNames = ["board1", "board2","board3"]
-	newnames = ["finalBoard1", "finalBoard2", "finalBoard3"]
-	deviations = [25,15,5]
-	capacities = [1507.0,1508.25,1506.75]
-	MEDIANOUTPUT = 50
-	BATTERYCUMCAP = (150 * MEDIANOUTPUT)
-	i = 0
-	for board in boardNames[:3]:
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+	for board in boardNames:
+		f = open(board+"houselist.csv", "w")
+		g = open(board+"batterylist.txt", "w")
+		f.write("x,y,out\n")
+		g.write("pos\t\tcap\n")
 		houseList, batteryList = loadBoard(board)
-		# plot.plotGrid(houseList, batteryList, 50, 50, method = "A")
-		capacityNow = [capacities[i] for x in range(len(batteryList))]
-		changeCapacityTo(batteryList, capacityNow)
-		changeDeviation(houseList, deviations[i], MEDIANOUTPUT, BATTERYCUMCAP)
 
-		print capacityNow, deviations[i], newnames[i]
+		for house in houseList:
+			stri1 = str(house.position[0])+","+str(house.position[1])+","+str(house.netto)+"\n"
+			f.write(stri1)
 
-		builder.saveBoard(houseList, batteryList, newnames[i], 50, 50)
+		for battery in batteryList:
+			stri1 = str(battery.position)+"\t"+str(battery.capacity)+"\n"
+			g.write(stri1)
 
 
-		i += 1
+
+
+
+ 
+
+
+
+
+# def main():
+# 	boardNames = ["board1", "board2","board3"]
+# 	newnames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+# 	deviations = [25,15,5]
+# 	capacities = [1507.0,1508.25,1506.75]
+# 	MEDIANOUTPUT = 50
+# 	BATTERYCUMCAP = (150 * MEDIANOUTPUT)
+# 	i = 0
+# 	for board in boardNames[:3]:
+# 		houseList, batteryList = loadBoard(board)
+# 		# plot.plotGrid(houseList, batteryList, 50, 50, method = "A")
+# 		capacityNow = [capacities[i] for x in range(len(batteryList))]
+# 		changeCapacityTo(batteryList, capacityNow)
+# 		changeDeviation(houseList, deviations[i], MEDIANOUTPUT, BATTERYCUMCAP)
+
+# 		print capacityNow, deviations[i], newnames[i]
+
+# 		builder.saveBoard(houseList, batteryList, newnames[i], 50, 50)
+
+
+# 		i += 1
 
 
 def main1():
@@ -140,7 +197,8 @@ def randomWalker(houseList, batteryList, iterations):
 		battery = random.choice(batteryList)
 		battery.assignedHouses[house.name][1] = True
 
-	scoreList = []
+	scoreList1 = []
+	scoreList2 = []
 	for i in range(iterations):
 		swapBool =random.choice([True, True])
 		house1 = random.choice(houseList)
@@ -163,9 +221,22 @@ def randomWalker(houseList, batteryList, iterations):
 		for battery in batteryList:
 			if battery.capacityLeft < 0:
 				score -= battery.capacityLeft
-		scoreList.append(score)
+		scoreList1.append(score)
+		scoreList2.append(cost(batteryList, houseList, 1, 1))
 
-	return scoreList
+	return scoreList1, scoreList2
+
+
+def cost(batteryList, houseList, wireCost, batteryCost):
+	""" calculates the cost of a setup of batteries and houses """
+
+	cost = 0
+	# cost += len(batteryList)*batteryCost
+	for battery in batteryList:
+		for houseKey in battery.assignedHouses:
+			if (battery.assignedHouses[houseKey][1]):
+				cost += battery.assignedHouses[houseKey][2]
+	return cost
 
 
 def swap(battery1, battery2, house1, house2):

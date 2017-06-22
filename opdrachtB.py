@@ -12,7 +12,7 @@ import SolverB
 
 
 def main():
-	boardNames = ["board0finalOpA", "board1finalOpA", "board2finalOpA"]
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 	for board in boardNames[1:3]:
 		# f = open(board+"opdrachtBResults_versie1.csv", "w")
 		capacities = []
@@ -27,7 +27,7 @@ def main():
 			# costs.append(finalCost)
 			# comptime.append(iterations)
 
-			print n, " : ", totalcap, finalCost, iterations
+			print n, " :anus ", totalcap, finalCost, iterations
 			n += 1
 			# f.write(str(totalcap)+","+ str(finalCost)+","+ str(iterations)+"\n")
 

@@ -3,6 +3,8 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
+	print "running hillclimber a"
+
 	# House to battery assignment
 	for house in houseList:
 		battery = random.choice(batteryList)
@@ -53,6 +55,8 @@ def hillClimber(iterations, houseList, batteryList):
 		
 		# before swap calculations
 		costBefore = cost(batteryList, houseList, wireCost, batteryCost)
+
+		
 		overCapacityBefore = 0
 		if (battery1.overCapacitated): 
 			overCapacityBefore -= ( battery1.capacityLeft)

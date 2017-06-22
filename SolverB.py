@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import hillClimberB as hill
+import hillClimberB as hillB
 import hillClimber as hillOld
 from random import randint
 import matplotlib.pyplot as plt
@@ -19,6 +19,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 	for house in houseList:
 		battery = random.choice(batteryList)
 		battery.assignedHouses[house.name][1] = True
+		house.batteryAssignment = battery
 
 	# battery positioning random
 	batteryPositionList =[]
@@ -37,7 +38,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		
 
 
-		a,b, itt = hill.hillClimber(1000, houseList, batteryList)
+		a,b, itt = hillB.hillClimber(1000, houseList, batteryList)
 
 		
 		iterations += 1 + itt
@@ -46,7 +47,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		for battery in batteryList:
 			# save old location
 			oldPosition = tuple(battery.position)
-			# print "oldposition", oldPosition
+			print "oldposition", oldPosition
 			
 			# initiate values for new battery-position
 			n = 0
@@ -60,17 +61,13 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 					positionSum += battery.assignedHouses[houseKey][0].position
 			battery.position = list(positionSum/n)
 
-		# 	# print "newposition", battery.position
+			print "newposition", battery.position
 
 			# save wether the battery moved since last time
 			if (tuple(battery.position) == oldPosition):
 				changedlist.append(False)
 			else:
 				changedlist.append(True)
-
-		# stop if no battery changed
-		if (all(i == True for i in changedlist)):
-			somethingChanged = False
 
 			# save wether the battery moved since last time
 			if (tuple(battery.position) == oldPosition):
@@ -89,7 +86,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			totalcap -= battery.capacityLeft
 
 			
-	finalCost = hill.cost(batteryList, houseList, 1, 2)
+	finalCost = hillB.cost(houseList)
 
 	return totalcap, finalCost, iterations
 

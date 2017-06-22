@@ -91,7 +91,7 @@ def hillClimber(iterations, houseList, batteryList):
 					swap(battery1, battery2, house1, house2)
 			else:
 				reset += 1
-				print reset
+				# print reset
 				nothingChanged = 0
 		
 
@@ -115,19 +115,15 @@ def swap(battery1, battery2, house1, house2):
 	battery1.assignedHouses[house2.name][1] = not battery1.assignedHouses[house2.name][1]
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
 	battery2.assignedHouses[house2.name][1] = not battery2.assignedHouses[house2.name][1]
-	house1.batteryAssignment = battery2
-	house2.batteryAssignment = battery1
-	# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber, battery1.assignedHouses[house1.name][1] ,battery1.assignedHouses[house2.name][1]
-	# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber, battery2.assignedHouses[house1.name][1] ,battery2.assignedHouses[house2.name][1]
-
-	# return ""+3
+	# house1.batteryAssignment = battery2
+	# house2.batteryAssignment = battery1
 	
 
 
 def assignment(battery1, battery2, house1):
 	battery1.assignedHouses[house1.name][1] = not battery1.assignedHouses[house1.name][1]
 	battery2.assignedHouses[house1.name][1] = not battery2.assignedHouses[house1.name][1]
-	house1.batteryAssignment = battery2
+	# house1.batteryAssignment = battery2
 
 
 # def totalOvercapacity(batteryList):

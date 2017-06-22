@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import time
 import Board
 import numpy as np
+# import SolverC as SolverB
 import SolverB
 
 

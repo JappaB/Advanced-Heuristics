@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import solverB
+import SolverB
 from random import randint
 import matplotlib.pyplot as plt
 import time
@@ -31,10 +31,19 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 	batteryCost = 0
 	for i in range(len(batteryOptions)):
 		batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
+	
+	#create batteryList
+	batteryList = []
+	number = 0
+	for batterycap in batteryConfiguration:
+		# newpos = [randint(0,boardLength), randint(0,boardHeight)]
+		Battery.battery(number, batterycap, houseList, False, position = [25,25])
+		number += 1
+
 	Wirecost = 0
 	cap = 1
 	while(cap > 0):
-		cap, wireLength, itt = solverB.solverB()
+		cap, wireLength, itt = SolverB.solverB(houseList, batteryList,50,50)
 	costBefore = batteryCost + wireLength*wireCost
 
 	# do until converge
@@ -56,10 +65,14 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 			# add
 			batteryConfiguration.append(random.choice(batteryOptions))
 
+
+
 		# if capacity is too high or low try something else
 		if((sum(batteryConfiguration)>(totalCapacity*1.13)) and (sum(batteryConfiguration)<=(totalCapacity))):
 			batteryConfiguration = oldConfiguration
 			continue
+
+		print oldConfiguration, batteryConfiguration
 
 		#create batteryList
 		batteryList = []
@@ -70,7 +83,8 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 
 		# calculate cost after
 		wireCosts = []
-		for x in range(100):
+		for x in range(5):
+			print "solver b itt:",x
 			cap, wireLength, itt = solverB.solverB(houseList, batteryList,50,50)
 			if (cap == 0):
 				wireCosts.append(wireLength*wireCost)
@@ -78,6 +92,8 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 		for i in range(len(batteryOptions)):
 			batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
 		costAfter = np.mean(wireCosts) + batteryCost
+
+		print costAfter, costBefore
 
 		# if no improvement, swap back, else keep change
 		if (costAfter >= costBefore):

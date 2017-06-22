@@ -42,7 +42,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		
 
 
-		a,b, itt = hillB.hillClimber(1000, houseList, batteryList)
+		cost, reset, itt = hillB.hillClimber(1000, houseList, batteryList)
 
 		
 		iterations += 1 + itt
@@ -51,7 +51,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		for battery in batteryList:
 			# save old location
 			oldPosition = tuple(battery.position)
-			print "oldposition", oldPosition
+			# print "oldposition", oldPosition
 			
 			# initiate values for new battery-position
 			n = 0
@@ -65,7 +65,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 					positionSum += battery.assignedHouses[houseKey][0].position
 			battery.position = list(positionSum/n)
 
-			print "newposition", battery.position
+			# print "newposition", battery.position
 
 			# save wether the battery moved since last time
 			if (tuple(battery.position) == oldPosition):
@@ -78,6 +78,8 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		if (all(i == False for i in changedlist)):
 			somethingChanged = False
 		print somethingChanged
+
+	cost, reset, itt = hillB.hillClimber(1000, houseList, batteryList)
 
 	totalcap = 0
 	for battery in batteryList:

@@ -32,9 +32,9 @@ def main():
 
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
-		f = open(board+"Final results- "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" - allemaal batteryCaps en st devs -.csv", "w")
-		f.write("Cost,Reset,Iterations,Solved,TimeInHC\n")
-		for i in range(1,25):
+		f = open(board+"Final results- "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" - allemaal batteryCaps en st devs, nu met extra gegevens -.csv", "w")
+		f.write("Cost,Reset,Iterations,Solved,TimeInHC,Dev,Batterycap\n")
+		for i in range(1,30):
 			BatteryCaps = (BATTERYCUMCAP/5)*(1+(CHANGECAPACITYFACTOROFBATTERIES*i))
 			
 			results2 = []
@@ -73,7 +73,7 @@ def main():
 				results2.append(solved)
 				print "percentage : ", float((solved/ITERATIONS)*100.0), "%"
 
-				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+"\n")
+				f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+","+str(deviation)+","+str(BatteryCaps)+"\n")
 			
 			print results2
 

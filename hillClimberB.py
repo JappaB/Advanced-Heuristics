@@ -38,6 +38,11 @@ def hillClimberB(iterations, houseList, batteryList, wireCost):
 				battery2 = battery
 				# print battery2.batteryNumber
 
+
+		#safe before positions to make the calculation of change in wirecost after easier
+		house1PositionBefore=house1.position
+		house2PostionBefore=house2.position
+
 		# Update current capacity used for each battery
 		# try:
 		battery1.update()
@@ -158,7 +163,7 @@ def totalWireCostBefore(wireCost,houseList):
 		totalWireCost = wireLength*wireCost
 		return totalWireCost
 
-def totalWireCostAfter(totalWireCostBefore, house1, house2):
+def totalWireCostAfter(totalWireCostBefore, house1, house2,house1PositionBefore,house2PostionBefore):
 
 	totalWireCost = totalWireCostBefore
 

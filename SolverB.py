@@ -29,6 +29,10 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			if (tuple(x) == tuple(newPosition)):
 				newPosition[0] = (newPosition[0] + 1) % boardLength
 				newPosition[1] = (newPosition[1] + 1) % boardHeight
+	i = 0
+	for battery in batteryList:
+		battery.position = batteryPositionList[i]
+		i += 1
 
 
 	iterations = 0
@@ -69,24 +73,20 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			else:
 				changedlist.append(True)
 
-			# save wether the battery moved since last time
-			if (tuple(battery.position) == oldPosition):
-				changedlist.append(True)
-			else:
-				changedlist.append(False)
-
+		print changedlist
 		# stop if no battery changed
-		if (all(i == True for i in changedlist)):
+		if (all(i == False for i in changedlist)):
 			somethingChanged = False
+		print somethingChanged
 
 	totalcap = 0
 	for battery in batteryList:
 		battery.update()
-		if battery.capacityLeft < 0:
+		if (battery.overCapacitated):
 			totalcap -= battery.capacityLeft
 
 			
-	finalCost = hillB.cost(houseList)
+	finalCost = hillB.cost(batteryList, houseList)
 
 	return totalcap, finalCost, iterations
 

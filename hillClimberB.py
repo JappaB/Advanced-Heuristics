@@ -1,5 +1,6 @@
 import random
 import Battery
+# import 
 
 def hillClimber(iterations, houseList, batteryList):
 
@@ -19,17 +20,17 @@ def hillClimber(iterations, houseList, batteryList):
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
 		house2 = random.choice(houseList)
-		battery1 = house1.batteryAssignment
-		battery2 = house2.batteryAssignment
+		# battery1 = house1.batteryAssignment
+		# battery2 = house2.batteryAssignment
 
 		# print house1.name, house1.batteryAssignment.batteryNumber, battery1.batteryNumber
 		# print house2.name, house2.batteryAssignment.batteryNumber, battery2.batteryNumber
 		# # Check to which battery the houses are linked
-		# for battery in batteryList:
-		# 	if battery.assignedHouses[house1.name][1]:
-		# 		battery1 = battery
-		# 	if battery.assignedHouses[house2.name][1]:
-		# 		battery2 = battery
+		for battery in batteryList:
+			if battery.assignedHouses[house1.name][1]:
+				battery1 = battery
+			if battery.assignedHouses[house2.name][1]:
+				battery2 = battery
 
 		# Update current capacity used for each battery
 		# try:
@@ -169,3 +170,4 @@ def cost(batteryList, houseList):
 # 		cost += manhattenDistance(position, goal)
 # 	costDifference = cost - distanceBefore
 # 	return costDifference
+

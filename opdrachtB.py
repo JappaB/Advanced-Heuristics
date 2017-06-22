@@ -13,7 +13,7 @@ import SolverB
 
 def main():
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
-	for board in boardNames[1:3]:
+	for board in boardNames:
 		# f = open(board+"opdrachtBResults_versie1.csv", "w")
 		capacities = []
 		costs = []
@@ -27,7 +27,8 @@ def main():
 			# costs.append(finalCost)
 			# comptime.append(iterations)
 
-			print n, " :anus ", totalcap, finalCost, iterations
+			print board, " itt :  ", n, " : ", totalcap, finalCost, iterations
+			plotGrid(houseList, batteryList)
 			n += 1
 			# f.write(str(totalcap)+","+ str(finalCost)+","+ str(iterations)+"\n")
 
@@ -38,7 +39,7 @@ def main():
 		# plt.plot(range(100),comptime)
 		# plt.show()
 
-		plotGrid(houseList, batteryList)
+		
 
 
 

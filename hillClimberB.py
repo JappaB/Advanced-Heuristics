@@ -3,7 +3,6 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
-	
 	# House to battery assignment
 	for house in houseList:
 		battery = random.choice(batteryList)
@@ -18,7 +17,6 @@ def hillClimber(iterations, houseList, batteryList):
 	nothingChanged = 0
 
 	iterating = 0
-
 	reset = 0
 
 	while(nothingChanged < iterations):
@@ -52,13 +50,16 @@ def hillClimber(iterations, houseList, batteryList):
 		battery2.update()
 		
 
-		# If none are overcapacitated, the swap is accepted if the total costs (in euro's) are lower afterwards
 		
+		# before swap calculations
 		costBefore = cost(batteryList, houseList, wireCost, batteryCost)
 		overCapacityBefore = 0
-		if (battery1.overCapacitated or battery2.overCapacitated):
-			overCapacityBefore = -( battery1.capacityLeft + battery2.capacityLeft)
+		if (battery1.overCapacitated): 
+			overCapacityBefore -= ( battery1.capacityLeft)
+		if (battery2.overCapacitated):
+			overCapacityBefore -= (battery2.capacityLeft)
 
+		# swap itself
 		assigned = True
 		if (((not battery1.overCapacitated) and (not battery2.overCapacitated)) or (battery1.capacityLeft == battery2.capacityLeft)):
 			swap(battery1, battery2, house1, house2)
@@ -71,13 +72,20 @@ def hillClimber(iterations, houseList, batteryList):
 				assignedHouse = house2
 			assignment(battery1,battery2,assignedHouse)
 
+		# update 
 		battery1.update()
 		battery2.update()
 
-		overCapacityAfter = -(battery1.capacityLeft + battery2.capacityLeft)
+		# after swap calculations of overcapacity
+		# try to get overcapacity from a positive number to zero
+		overCapacityAfter = 0
+		if (battery1.overCapacitated):
+			overCapacityAfter -= ( battery1.capacityLeft)
+		if (battery2.overCapacitated):
+			overCapacityAfter -= (battery2.capacityLeft)
 
 		# als een van de twee overcapacitated is, dan wil je dat eerst fixen, anders ga je score optimaliseren
-		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter >= overCapacityBefore):
+		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter > overCapacityBefore):
 			if (assigned):
 				assignment(battery1,battery2,assignedHouse)
 			else:
@@ -94,15 +102,14 @@ def hillClimber(iterations, houseList, batteryList):
 				else:
 					swap(battery1, battery2, house1, house2)
 			else:
+				reset += 1
 				nothingChanged = 0
-				reset += 1 
 
 
 	for battery in batteryList:
 		battery.update()
-
 	# return final cost, hoe veel overcapaciteit er nog is
-	return min(costAfter,costBefore), reset, iterating
+	return cost(batteryList, houseList, wireCost, batteryCost), reset, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery
@@ -135,7 +142,7 @@ def cost(batteryList, houseList, wireCost, batteryCost):
 	for battery in batteryList:
 		for houseKey in battery.assignedHouses:
 			if (battery.assignedHouses[houseKey][1]):
-				cost += manhattenDistance(battery.position, battery.assignedHouses[houseKey][0].position)
+				cost += battery.assignedHouses[houseKey][2]
 	return cost
 
 def manhattenDistance(position, goal):

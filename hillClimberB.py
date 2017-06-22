@@ -1,12 +1,8 @@
 import random
 import Battery
 
-def hillClimber(iterations, houseList, batteryList):
+def hillClimberB(iterations, houseList, batteryList, wireCost, batteryCost):
 
-	# House to battery assignment
-	for house in houseList:
-		battery = random.choice(batteryList)
-		battery.assignedHouses[house.name][1] = True
 
 	# Battery.batteryInformation(True,0,batteryList)
 
@@ -23,8 +19,6 @@ def hillClimber(iterations, houseList, batteryList):
 
 
 		iterating += 1
-
-		# print nothingChanged
 		
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
@@ -52,7 +46,16 @@ def hillClimber(iterations, houseList, batteryList):
 
 		
 		# before swap calculations
-		costBefore = cost(batteryList, houseList, wireCost, batteryCost)
+
+		Wirelength = 0
+		for house in houseList:
+			position = house.position
+			battery = house.batteryAssignment
+			wirelength += manhattenDistance(position, goal):
+
+
+
+		Batterycosts = 
 		overCapacityBefore = 0
 		if (battery1.overCapacitated): 
 			overCapacityBefore -= ( battery1.capacityLeft)

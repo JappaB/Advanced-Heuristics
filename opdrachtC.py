@@ -17,25 +17,29 @@ import pickle
 
 
 def main():
-	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+	boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	for board in boardNames:
 		f = open(board+"_C_5tot15_10keer50exitc.csv", "w")
-		for wirecost in range(9,11):
+		for wirecost in [100,2,7,13,18]:
 			results = [[],[],[]]
-			for i in range(1):
+			for i in range(3):
 				print "wirecost: ", wirecost, "itteratie : ", i
 				houseList, batteryList = loadBoard(board)
-				import cProfile, pstats, StringIO
-				pr = cProfile.Profile()
-				pr.enable()
-				confList = SolverC.solverC(houseList,50,50,wirecost)
-				pr.disable()
-				s = StringIO.StringIO()
-				sortby = 'cumulative'
-				ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-				ps.print_stats() # TODO
-				print s.getvalue()
-				return
+				# print houseList
+				batteryOptions = [450,900,1800]
+				batteryOptions = [72,144,288]
+				batterycosts = [900,1350,1800]
+				# import cProfile, pstats, StringIO
+				# pr = cProfile.Profile()
+				# pr.enable()
+				confList = SolverC.solverC(houseList,20,20,wirecost,batteryOptions,1.5, batterycosts  )
+				# pr.disable()
+				# s = StringIO.StringIO()
+				# sortby = 'cumulative'
+				# ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+				# ps.print_stats() # TODO
+				# print s.getvalue()
+				# return
 				results[0].append(confList[0])
 				results[1].append(confList[1])
 				results[2].append(confList[2])

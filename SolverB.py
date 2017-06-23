@@ -34,12 +34,13 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		batteryPositionList.append(newPosition)
 	
 
-	print batteryPositionList
+	# print batteryPositionList
 	i = 0
 	for battery in batteryList:
-		print i
+		# print i
 		battery.position = batteryPositionList[i]
 		i += 1
+		battery.update()
 
 
 	iterations = 0
@@ -80,7 +81,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			else:
 				changedlist.append(True)
 
-		print changedlist
+		# print changedlist
 		# stop if no battery changed
 		if (all(i == False for i in changedlist)):
 			somethingChanged = False

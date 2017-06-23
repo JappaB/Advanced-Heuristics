@@ -28,6 +28,13 @@ class battery(object):
 			self.overCapacitated = False
 
 
+	def checkOvercapacity(self):
+		if (self.capacityLeft < 0):
+			self.overCapacitated = True
+		else:
+			self.overCapacitated = False
+
+
 def createBatteries(n_batteries, totalCapacity, batteryPositionList, capacityList, batteryList, houseList):
 
 	# print n_batteries, totalCapacity, batteryPositionList, capacityList

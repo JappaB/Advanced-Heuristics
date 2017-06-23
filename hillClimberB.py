@@ -4,7 +4,7 @@ import Battery
 
 def hillClimber(iterations, houseList, batteryList):
 
-	print "running hillclimber b"
+	# print "running hillclimber b"
 
 	nothingChanged = 0
 	iterating = 0
@@ -34,8 +34,8 @@ def hillClimber(iterations, houseList, batteryList):
 
 		# Update current capacity used for each battery
 		# try:
-		battery1.update()
-		battery2.update()
+		battery1.checkOvercapacity()
+		battery2.checkOvercapacity()
 
 		# before swap calculations of the wireCost
 		costBefore = manhattenDistance(battery1.position,house1.position)+manhattenDistance(battery2.position,house2.position) #cost2(batteryList,houseList)
@@ -51,18 +51,23 @@ def hillClimber(iterations, houseList, batteryList):
 		assigned = True
 		if (((not battery1.overCapacitated) and (not battery2.overCapacitated)) or (battery1.capacityLeft == battery2.capacityLeft)):
 			swap(battery1, battery2, house1, house2)
+			battery1.capacityLeft += (house1.netto - house2.netto)
+			battery2.capacityLeft += (house2.netto - house1.netto)
 			assigned = False
 		else:
 			assignedHouse = house1
-			if(battery1.capacityLeft < battery2.capacityLeft):
-				assignedHouse = house1
-			elif(battery1.capacityLeft > battery2.capacityLeft):
+			if(battery1.capacityLeft > battery2.capacityLeft):
 				assignedHouse = house2
+				battery2.capacityLeft +=  house2.netto
+				battery1.capacityLeft -=  house2.netto
+			else:
+				battery2.capacityLeft -=  house1.netto
+				battery1.capacityLeft +=  house1.netto
 			assignment(battery1,battery2,assignedHouse)
 
 		# update 
-		battery1.update()
-		battery2.update()
+		battery1.checkOvercapacity()
+		battery2.checkOvercapacity()
 
 		# after swap calculations of overcapacity
 		# try to get overcapacity from a positive number to zero
@@ -76,8 +81,16 @@ def hillClimber(iterations, houseList, batteryList):
 		if (battery1.overCapacitated or battery2.overCapacitated) and (overCapacityAfter > overCapacityBefore):
 			if (assigned):
 				assignment(battery1,battery2,assignedHouse)
+				if (assignedHouse == house1):
+					battery2.capacityLeft +=  house1.netto
+					battery1.capacityLeft -=  house1.netto
+				else:
+					battery2.capacityLeft -=  house2.netto
+					battery1.capacityLeft +=  house2.netto
 			else:
 				swap(battery1, battery2, house1, house2)
+				battery1.capacityLeft += -(house1.netto - house2.netto)
+				battery2.capacityLeft += -(house2.netto - house1.netto)
 			nothingChanged += 1
 			costAfter = costBefore
 		else:
@@ -90,14 +103,21 @@ def hillClimber(iterations, houseList, batteryList):
 			else:
 				costAfter = manhattenDistance(battery1.position,house2.position)+manhattenDistance(battery2.position,house1.position)
 
-
 			if (costBefore <= costAfter):
 			# Swap back
 				nothingChanged += 1
 				if (assigned):
 					assignment(battery1,battery2,assignedHouse)
+					if (assignedHouse == house1):
+						battery2.capacityLeft +=  house1.netto
+						battery1.capacityLeft -=  house1.netto
+					else:
+						battery2.capacityLeft -=  house2.netto
+						battery1.capacityLeft +=  house2.netto
 				else:
 					swap(battery1, battery2, house1, house2)
+					battery1.capacityLeft += -(house1.netto - house2.netto)
+					battery2.capacityLeft += -(house2.netto - house1.netto)
 			else:
 				reset += 1
 				# print reset

@@ -25,7 +25,17 @@ def main():
 			for i in range(1):
 				print "wirecost: ", wirecost, "itteratie : ", i
 				houseList, batteryList = loadBoard(board)
+				import cProfile, pstats, StringIO
+				pr = cProfile.Profile()
+				pr.enable()
 				confList = SolverC.solverC(houseList,50,50,wirecost)
+				pr.disable()
+				s = StringIO.StringIO()
+				sortby = 'cumulative'
+				ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+				ps.print_stats() # TODO
+				print s.getvalue()
+				return
 				results[0].append(confList[0])
 				results[1].append(confList[1])
 				results[2].append(confList[2])

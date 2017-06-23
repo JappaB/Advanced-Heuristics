@@ -38,7 +38,7 @@ def solverC(houseList, boardLength, boardHeight, wireCost, method = "A"):
 	for i in range(len(batteryOptions)):
 		batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
 
-	print "batteryConfiguration, sum(batteryConfiguration), batteryCost :", batteryConfiguration, sum(batteryConfiguration), batteryCost
+	# print "batteryConfiguration, sum(batteryConfiguration), batteryCost :", batteryConfiguration, sum(batteryConfiguration), batteryCost
 	
 	batteryList = createBatteryList(batteryConfiguration,50,50, houseList)
 
@@ -52,8 +52,8 @@ def solverC(houseList, boardLength, boardHeight, wireCost, method = "A"):
 
 	# do until converge
 	nothingChanged = 0
-	while(nothingChanged < 50):
-		print "NothingChanged since : ", nothingChanged
+	while(nothingChanged < 10):
+		# print "NothingChanged since : ", nothingChanged
 
 		# change something
 		oldConfiguration = deepcopy(batteryConfiguration)
@@ -77,14 +77,16 @@ def solverC(houseList, boardLength, boardHeight, wireCost, method = "A"):
 			batteryConfiguration = oldConfiguration
 			continue
 
-		print oldConfiguration, batteryConfiguration
+		# print oldConfiguration, batteryConfiguration
 
-		
+		countlist = []
+		for i in range(len(batteryOptions)):
+			countlist.append(batteryConfiguration.count(batteryOptions[i]))
 
 		# calculate cost after
 		wireCosts = []
-		for x in range(2):
-			print "solver b itt:",x
+		for x in range(5):
+			print "solver b itt:",x, "nothing canged ", nothingChanged, " batteries : ", countlist
 			batteryList = createBatteryList(batteryConfiguration,50,50, houseList)
 			cap, wireLength, itt = SolverB.solverB(houseList, batteryList,50,50)
 			if (cap == 0):
@@ -94,19 +96,21 @@ def solverC(houseList, boardLength, boardHeight, wireCost, method = "A"):
 			batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
 		costAfter = np.mean(wireCosts) + batteryCost
 
-		print costAfter, costBefore
+		# print costAfter, costBefore
 
 		# if no improvement, swap back, else keep change
 		if (costAfter >= costBefore):
+			print "worse"
 			batteryConfiguration = oldConfiguration
 			nothingChanged += 1
 		else:
+			print "better"
 			costBefore = costAfter
 			nothingChanged = 0
 
 	countlist = []
 	for i in range(len(batteryOptions)):
-		countlist.append(batteryConfiguration.count(batteryOptions[i])*batterycosts[i])
+		countlist.append(batteryConfiguration.count(batteryOptions[i]))
 
 	return countlist
 

@@ -19,18 +19,25 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 	for house in houseList:
 		battery = random.choice(batteryList)
 		battery.assignedHouses[house.name][1] = True
-		house.batteryAssignment = battery
+		# house.batteryAssignment = battery
 
 	# battery positioning random
 	batteryPositionList =[]
 	for x in range(len(batteryList)):
+
 		newPosition = [randint(0,boardLength), randint(0,boardHeight)]
-		for x in batteryPositionList:
-			if (tuple(x) == tuple(newPosition)):
+		for j in batteryPositionList:
+			if (tuple(j) == tuple(newPosition)):
 				newPosition[0] = (newPosition[0] + 1) % boardLength
 				newPosition[1] = (newPosition[1] + 1) % boardHeight
+
+		batteryPositionList.append(newPosition)
+	
+
+	print batteryPositionList
 	i = 0
 	for battery in batteryList:
+		print i
 		battery.position = batteryPositionList[i]
 		i += 1
 
@@ -77,7 +84,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		# stop if no battery changed
 		if (all(i == False for i in changedlist)):
 			somethingChanged = False
-		print somethingChanged
+		# print somethingChanged
 
 	cost, reset, itt = hillB.hillClimber(1000, houseList, batteryList)
 
@@ -88,7 +95,7 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 			totalcap -= battery.capacityLeft
 
 			
-	finalCost = hillB.cost(batteryList, houseList)
+	finalCost = hillB.cost2(batteryList, houseList)
 
 	return totalcap, finalCost, iterations
 

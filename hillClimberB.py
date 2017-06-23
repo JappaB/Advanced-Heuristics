@@ -99,7 +99,7 @@ def hillClimber(iterations, houseList, batteryList):
 	for battery in batteryList:
 		battery.update()
 	# return final cost, hoe veel overcapaciteit er nog is
-	return cost(batteryList, houseList), reset, iterating
+	return cost2(batteryList, houseList), reset, iterating
 
 def swap(battery1, battery2, house1, house2):
 	#50/50 chance to either swap between two houses or to assign one house to a new battery

@@ -27,65 +27,70 @@ def solverC(houseList, boardLength, boardHeight, wirePrice, batteryOptions, maxO
 	for x in range(34):
 		for y in range(9):
 			cap = x*batteryOptions[0] + y*batteryOptions[1]
-			if (cap >totalCapacity*1.05) and (cap < totalCapacity*2)
+			if (cap >totalCapacity*1.4) and (cap < totalCapacity*1.5):
+				confList = [batteryOptions[0] for i in range(x)] + [batteryOptions[1] for j in range(y)]
+				possibleConfigurations.append(confList)
 
+	
 	# make inital configuration
-	batteryConfiguration = initialConfiguration(method, totalCapacity, maxOvercapacity, batteryOptions)
+	# batteryConfiguration = initialConfiguration(method, totalCapacity, maxOvercapacity, batteryOptions)
 	
 	# calculate initial cost
-	batteryCost = batteryCost1(batteryOptions, batterycosts, batteryConfiguration)
-	wireLength = 0
-	cap = 1
-	while(cap > 0):
-		print "initiation try"
-		batteryList = createBatteryList(batteryConfiguration,boardLength,boardHeight, houseList)
-		cap, wireLength, itt = SolverB.solverB(houseList, batteryList,boardLength,boardHeight)
-	costBefore = batteryCost + wireLength*wirePrice 
-	print "initiation confirmed : ", countBatteries(batteryConfiguration, batteryOptions), len(batteryConfiguration)
-	
+	# batteryCost = batteryCost1(batteryOptions, batterycosts, batteryConfiguration)
+	# wireLength = 0
+	# cap = 1
+	# while(cap > 0):
+	# 	print "initiation try"
+	# 	batteryList = createBatteryList(batteryConfiguration,boardLength,boardHeight, houseList)
+	# 	cap, wireLength, itt = SolverB.solverB(houseList, batteryList,boardLength,boardHeight)
+	# costBefore = batteryCost + wireLength*wirePrice 
+	# print "initiation confirmed : ", countBatteries(batteryConfiguration, batteryOptions), len(batteryConfiguration)
+	results = {}
 
 	# do until converge
-	nothingChanged = 0
-	while(nothingChanged < 10):
+	# nothingChanged = 0
+	# while(nothingChanged < 10):
+	for batteryConfiguration in possibleConfigurations:
 
 		# change something
-		oldConfiguration = deepcopy(batteryConfiguration)
-		batteryConfiguration = changeConfiguration(batteryConfiguration, batteryOptions)
+		# oldConfiguration = deepcopy(batteryConfiguration)
+		# batteryConfiguration = changeConfiguration(batteryConfiguration, batteryOptions)
 
 		# if capacity is too high or low try something else
-		if((sum(batteryConfiguration)>(totalCapacity*maxOvercapacity*1.1)) or (sum(batteryConfiguration)<=(totalCapacity)) or (tuple(countBatteries(batteryConfiguration, batteryOptions)) in checked)):
-			batteryConfiguration = oldConfiguration
-			continue
+		# if((sum(batteryConfiguration)>(totalCapacity*maxOvercapacity*1.1)) or (sum(batteryConfiguration)<=(totalCapacity)) or (tuple(countBatteries(batteryConfiguration, batteryOptions)) in checked)):
+		# 	batteryConfiguration = oldConfiguration
+		# 	continue
 
 		# new configuration to be checked
 		readableConfiguration = countBatteries(batteryConfiguration, batteryOptions)
-		checked.add(tuple(readableConfiguration))
-		print readableConfiguration, len(batteryConfiguration)
+		# checked.add(tuple(readableConfiguration))
+		# print readableConfiguration, len(batteryConfiguration)
 
 		wireCost = 0
 		batteryCost = 0
-		costAfter = 0
+		# costAfter = 0
 		# calculate cost after
 		# calculate wirecost
-		wireCost = wireCost1(25, batteryConfiguration, boardLength,boardHeight, houseList, wirePrice, nothingChanged, readableConfiguration)
-		
+		wireCost = wireCost1(25, batteryConfiguration, boardLength,boardHeight, houseList, wirePrice, 0, readableConfiguration)
 		# calculate batterycost
 		batteryCost = batteryCost1(batteryOptions, batterycosts, batteryConfiguration)
 		# calculate total costafter
-		costAfter = wireCost + batteryCost
+		cost = wireCost + batteryCost
+
+		results[str(readableConfiguration)] = cost
 		
-		print costBefore- costAfter
+		# print costBefore- costAfter
 
 		# if no improvement, swap back, else keep change
-		if (costAfter >= costBefore):
-			print "worse so restore:", countBatteries(oldConfiguration, batteryOptions)
-			batteryConfiguration = oldConfiguration
-			nothingChanged += 1
-		else:
-			print "better so use : ", readableConfiguration
-			costBefore = costAfter
-			nothingChanged = 0
-	return countBatteries(batteryConfiguration, batteryOptions)
+		# if (costAfter >= costBefore):
+		# 	print "worse so restore:", countBatteries(oldConfiguration, batteryOptions)
+		# 	batteryConfiguration = oldConfiguration
+		# 	nothingChanged += 1
+		# else:
+		# 	print "better so use : ", readableConfiguration
+		# 	costBefore = costAfter
+		# 	nothingChanged = 0
+	return results
 
 def createBatteryList(configuration, l, h, houseList):
 	#create batteryList
@@ -138,19 +143,17 @@ def changeConfiguration(batteryConfiguration, batteryOptions):
 
 def wireCost1(iterations, batteryConfiguration, boardLength,boardHeight, houseList, wirePrice, nothingChanged, countlist):
 	wireCost = 0
+	tries = 0
 	wireCosts = []
-	while(len(wireCosts) < iterations)
-		print "solver b itt:",x, "nothing canged ", nothingChanged, " batteries : ", countlist
+	while(len(wireCosts) < iterations):
+		if (tries > 200):
+			return 1000000000000000000000
+		print "solver b", "nothing canged ", len(wireCosts), " batteries : ", countlist
 		batteryList = createBatteryList(batteryConfiguration,boardLength,boardHeight, houseList)
 		cap, wireLength, itt = SolverB.solverB(houseList, batteryList,boardLength,boardHeight)
 		if (cap == 0):
 			wireCosts.append(wireLength*wirePrice)
 	wireCost = np.mean(wireCosts)
-	if (len(wireCosts) < 1):
-		print "no solutions found in hillclimbers "		
-		wireCost = 100000000000000000
-	else:
-		print len(wireCosts)
 
 	print "in formula", wireCost
 	return wireCost

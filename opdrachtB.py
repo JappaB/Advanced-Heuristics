@@ -7,6 +7,7 @@ import matplotlib.pyplot as plt
 import time
 import Board
 import numpy as np
+# import SolverC as SolverB
 import SolverB
 
 
@@ -20,16 +21,26 @@ def main():
 		comptime = []
 		totalcap = 1.0
 		n = 1
-		while(totalcap >0.0):
-			houseList, batteryList = loadBoard(board)
-			totalcap, finalCost, iterations = SolverB.solverB(houseList, batteryList,50,50)
-			# capacities.append(totalcap)
-			# costs.append(finalCost)
-			# comptime.append(iterations)
+		# while(totalcap >0.0):
+		houseList, batteryList = loadBoard(board)
+		import cProfile, pstats, StringIO
+		pr = cProfile.Profile()
+		pr.enable()
+		totalcap, finalCost, iterations = SolverB.solverB(houseList, batteryList,50,50)
+		pr.disable()
+		s = StringIO.StringIO()
+		sortby = 'cumulative'
+		ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
+		ps.print_stats() # TODO
+		print s.getvalue()
+		# totalcap, finalCost, iterations = SolverB.solverB(houseList, batteryList,50,50)
+		# 	# capacities.append(totalcap)
+		# 	# costs.append(finalCost)
+		# 	# comptime.append(iterations)
 
-			print board, " itt :  ", n, " : ", totalcap, finalCost, iterations
-			plotGrid(houseList, batteryList)
-			n += 1
+		# 	print board, " itt :  ", n, " : ", totalcap, finalCost, iterations
+		# 	plotGrid(houseList, batteryList)
+		# 	n += 1
 			# f.write(str(totalcap)+","+ str(finalCost)+","+ str(iterations)+"\n")
 
 		# plt.plot(range(100),capacities)

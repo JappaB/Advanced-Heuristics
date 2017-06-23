@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import solverB
+import SolverB
 from random import randint
 import matplotlib.pyplot as plt
 import time
@@ -13,7 +13,7 @@ from matplotlib.ticker import LinearLocator, FormatStrFormatter
 from matplotlib import cm
 from copy import deepcopy
 
-def solverC(houseList, boardLength, boardHeight, wireCost):
+def solverC(houseList, boardLength, boardHeight, wireCost, method = "A"):
 	batteryOptions = [450,900,1800]
 	batterycosts = [900,1350,1800]
 	
@@ -24,22 +24,36 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 
 	# make inital configuration
 	batteryConfiguration = []
-	while(sum(batteryConfiguration)<(totalCapacity*1.13)):
-		batteryConfiguration.append(random.choice(batteryOptions))
+	
+	if (method == "A"):
+		while(sum(batteryConfiguration)<(totalCapacity*1.01)):
+			batteryConfiguration.append(random.choice(batteryOptions))
+	else:
+		batteryConfiguration = [450,450,450,900,900,900,1800,1800]
+
+	
 
 	# calculate initial cost
 	batteryCost = 0
 	for i in range(len(batteryOptions)):
 		batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
+
+	print "batteryConfiguration, sum(batteryConfiguration), batteryCost :", batteryConfiguration, sum(batteryConfiguration), batteryCost
+	
+	batteryList = createBatteryList(batteryConfiguration,50,50, houseList)
+
+	# print batteryList
+
 	Wirecost = 0
 	cap = 1
 	while(cap > 0):
-		cap, wireLength, itt = solverB.solverB()
+		cap, wireLength, itt = SolverB.solverB(houseList, batteryList,50,50)
 	costBefore = batteryCost + wireLength*wireCost
 
 	# do until converge
 	nothingChanged = 0
 	while(nothingChanged < 50):
+		print "NothingChanged since : ", nothingChanged
 
 		# change something
 		oldConfiguration = deepcopy(batteryConfiguration)
@@ -47,37 +61,40 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 		oldbattery = 0 
 		if (choice < 2):
 			# swap
-			batteryConfiguration.pop(randint(0,len(batteryConfiguration)))
+			batteryConfiguration.pop(randint(0,len(batteryConfiguration)-1))
 			batteryConfiguration.append(random.choice(batteryOptions))
 		elif (choice == 2):
 			# remove
-			batteryConfiguration.pop(randint(0,len(batteryConfiguration)))
+			batteryConfiguration.pop(randint(0,len(batteryConfiguration)-1))
 		else:
 			# add
 			batteryConfiguration.append(random.choice(batteryOptions))
 
+
+
 		# if capacity is too high or low try something else
-		if((sum(batteryConfiguration)>(totalCapacity*1.13)) and (sum(batteryConfiguration)<=(totalCapacity))):
+		if((sum(batteryConfiguration)>(totalCapacity*1.13)) or (sum(batteryConfiguration)<=(totalCapacity))):
 			batteryConfiguration = oldConfiguration
 			continue
 
-		#create batteryList
-		batteryList = []
-		number = 0
-		for batterycap in batteryConfiguration:
-			Battery.battery(number, batterycap, houseList, False, position = [randint(0,boardLength), randint(0,boardHeight)])
-			number += 1
+		print oldConfiguration, batteryConfiguration
+
+		
 
 		# calculate cost after
 		wireCosts = []
-		for x in range(100):
-			cap, wireLength, itt = solverB.solverB(houseList, batteryList,50,50)
+		for x in range(2):
+			print "solver b itt:",x
+			batteryList = createBatteryList(batteryConfiguration,50,50, houseList)
+			cap, wireLength, itt = SolverB.solverB(houseList, batteryList,50,50)
 			if (cap == 0):
 				wireCosts.append(wireLength*wireCost)
 		batteryCost = 0
 		for i in range(len(batteryOptions)):
 			batteryCost += batteryConfiguration.count(batteryOptions[i])*batterycosts[i]
 		costAfter = np.mean(wireCosts) + batteryCost
+
+		print costAfter, costBefore
 
 		# if no improvement, swap back, else keep change
 		if (costAfter >= costBefore):
@@ -87,4 +104,21 @@ def solverC(houseList, boardLength, boardHeight, wireCost):
 			costBefore = costAfter
 			nothingChanged = 0
 
-	return batteryConfiguration
+	countlist = []
+	for i in range(len(batteryOptions)):
+		countlist.append(batteryConfiguration.count(batteryOptions[i])*batterycosts[i])
+
+	return countlist
+
+def createBatteryList(configuration, l, h, houseList):
+	#create batteryList
+	batteryList = []
+	number = 0
+	for batterycap in configuration:
+		x = randint(0,l)
+		y = randint(0,h)
+		newpos = [x,y]
+		newbat = Battery.battery(number, batterycap, houseList, False, position = newpos)
+		number += 1
+		batteryList.append(newbat)
+	return batteryList

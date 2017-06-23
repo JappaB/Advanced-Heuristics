@@ -13,7 +13,7 @@ def hillClimber(iterations, houseList, batteryList):
 	while(nothingChanged < iterations):
 		# print nothingChanged
 
-		# print "\n",cost(batteryList, houseList), cost2(batteryList, houseList), "\n"
+		# print "\n", cost2(batteryList, houseList), "\n"
 
 		iterating += 1
 		
@@ -38,7 +38,7 @@ def hillClimber(iterations, houseList, batteryList):
 		battery2.update()
 
 		# before swap calculations of the wireCost
-		costBefore = cost2(batteryList,houseList)
+		costBefore = manhattenDistance(battery1.position,house1.position)+manhattenDistance(battery2.position,house2.position) #cost2(batteryList,houseList)
 		# two_housesBefore = wireDifference(0, [house1,house2])
 
 		overCapacityBefore = 0
@@ -81,7 +81,16 @@ def hillClimber(iterations, houseList, batteryList):
 			nothingChanged += 1
 			costAfter = costBefore
 		else:
-			costAfter = cost2(batteryList,houseList)
+			costAfter = 0#cost2(batteryList,houseList)
+			if (assigned):
+				for battery in batteryList:
+					for house in [house1,house2]:
+						if battery.assignedHouses[house.name][1]:
+							costAfter += manhattenDistance(battery.assignedHouses[house.name][0].position,battery.position)
+			else:
+				costAfter = manhattenDistance(battery1.position,house2.position)+manhattenDistance(battery2.position,house1.position)
+
+
 			if (costBefore <= costAfter):
 			# Swap back
 				nothingChanged += 1

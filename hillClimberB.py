@@ -20,6 +20,8 @@ def hillClimber(iterations, houseList, batteryList):
 		# Randomly pick a house and assign to another battery
 		house1 = random.choice(houseList)
 		house2 = random.choice(houseList)
+		battery1 = 0
+		battery2 = 0
 		# battery1 = house1.batteryAssignment
 		# battery2 = house2.batteryAssignment
 
@@ -36,6 +38,7 @@ def hillClimber(iterations, houseList, batteryList):
 		# try:
 		battery1.checkOvercapacity()
 		battery2.checkOvercapacity()
+
 
 		# before swap calculations of the wireCost
 		costBefore = manhattenDistance(battery1.position,house1.position)+manhattenDistance(battery2.position,house2.position) #cost2(batteryList,houseList)

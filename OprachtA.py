@@ -19,6 +19,11 @@ builder = BoardBuilder.boardBuilder()
 plot = Plotter.plotter()
 
 
+def main():
+	houseList, batteryList = builder.createBoard(20,20,24,0)
+	changeDeviation(houseList, 15, 50, 1200)
+	builder.saveBoard(houseList, batteryList, "small_test_board20x20_24h", 20, 20)
+
 def main5():
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 	for board in boardNames:
@@ -50,7 +55,7 @@ def main5():
 		print (time.time() - start_time)
 
 
-def main():
+def main6():
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 	for board in boardNames:
 		f = open(board+"houselist.csv", "w")

@@ -22,13 +22,6 @@ def solverC(houseList, boardLength, boardHeight, wirePrice, batteryOptions, maxO
 	for house in houseList:
 		totalCapacity += house.netto
 
-	possibleConfigurations = []
-
-	for x in range(34):
-		for y in range(9):
-			cap = x*batteryOptions[0] + y*batteryOptions[1]
-			if (cap >totalCapacity*1.05) and (cap < totalCapacity*2)
-
 	# make inital configuration
 	batteryConfiguration = initialConfiguration(method, totalCapacity, maxOvercapacity, batteryOptions)
 	

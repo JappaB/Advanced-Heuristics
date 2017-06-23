@@ -42,7 +42,6 @@ def solverB(houseList, batteryList, boardLength, boardHeight):
 		i += 1
 		battery.update()
 
-
 	iterations = 0
 	somethingChanged = True
 	while(somethingChanged):

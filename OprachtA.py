@@ -20,6 +20,15 @@ plot = Plotter.plotter()
 
 
 def main():
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+	for board in boardNames:
+		houseList, batteryList = loadBoard(board)
+		plot.plotPicture(houseList, batteryList,50,50)
+
+
+
+
+def main7():
 	houseList, batteryList = builder.createBoard(20,20,24,0)
 	changeDeviation(houseList, 15, 50, 1200)
 	builder.saveBoard(houseList, batteryList, "small_test_board20x20_24h", 20, 20)

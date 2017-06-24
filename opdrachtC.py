@@ -17,38 +17,43 @@ import pickle
 
 
 def main():
-	boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
-	for board in boardNames:
-		f = open(board+"_C_5tot15_10keer50exitc.csv", "w")
-		for wirecost in [100,0]:
-			results = [[],[],[]]
-			for i in range(1):
-				print "wirecost: ", wirecost, "itteratie : ", i
+	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+
+	for board in boardNames[:1]:
+		f = open(board+"_CanalyseConstructief.csv", "w")
+		f.write("conf,0,5,6,7,8,9,10,11,12,13,14,15,100,batterycost\n")
+		houseList, batteryList = loadBoard(board)
+		batteryOptions = [450,1800]
+		batterycosts = [900,1800]
+		possibleConfigurations = precalculateCapacities(houseList, batteryOptions)
+		for conf in possibleConfigurations:
+			stri = str(countBatteries(conf, batteryOptions)[0])+" | "+str(countBatteries(conf, batteryOptions)[1])+","
+			batterycost = 0
+			for wirecost in [0,5,6,7,8,9,10,11,12,13,14,15,100]:
+				print board, "  | configuration : ", countBatteries(conf, batteryOptions), " wirecost : ", wirecost
 				houseList, batteryList = loadBoard(board)
-				# print houseList
-				batteryOptions = [450,900,1800]
-				batteryOptions = [72,288]
-				batterycosts = [900,1800]
-				# import cProfile, pstats, StringIO
-				# pr = cProfile.Profile()
-				# pr.enable()
-				confList = SolverC.solverC(houseList,20,20,wirecost,batteryOptions,1.5, batterycosts  )
-				# pr.disable()
-				# s = StringIO.StringIO()
-				# sortby = 'cumulative'
-				# ps = pstats.Stats(pr, stream=s).sort_stats(sortby)
-				# ps.print_stats() # TODO
-				# print s.getvalue()
-				# return
-				results[0].append(confList[0])
-				results[1].append(confList[1])
-				results[2].append(confList[2])
-			stri = str(wirecost)+","
-			for res in results:
-				stri = stri+str(np.mean(res))+","
-			stri = stri+"\n"
+				cost, batterycost = SolverC.solverC(houseList,50,50,wirecost,batteryOptions, batterycosts, conf)
+				stri = stri + str(cost)+ ","
+			stri = stri + str(batterycost) +"\n"
+			f.write(stri)	
 
+def precalculateCapacities(houseList,batteryOptions):
+	totalCapacity = 0
+	for house in houseList:
+		totalCapacity += house.netto
 
+	print totalCapacity
+
+	possibleConfigurations = []
+
+	for x in range(34):
+		for y in range(9):
+			cap = x*batteryOptions[0] + y*batteryOptions[1]
+			if (cap >totalCapacity*1.005) and (cap < totalCapacity*1.5):
+				confList = [batteryOptions[0] for i in range(x)] + [batteryOptions[1] for j in range(y)]
+				possibleConfigurations.append(confList)
+	return possibleConfigurations
 
 def loadBoard(boardName):
 	""" loads board with name """
@@ -60,7 +65,12 @@ def loadBoard(boardName):
 	return houseList, batteryList
 
 
+def countBatteries(batteryConfiguration, batteryOptions):
+	countlist = []
+	for i in range(len(batteryOptions)):
+		countlist.append(batteryConfiguration.count(batteryOptions[i]))
 
+	return countlist
 
 
 # def createHousesBoardC(boardLength, boardHeight, n_houses):

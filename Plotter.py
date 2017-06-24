@@ -87,8 +87,8 @@ class plotter:
 		image_path = "b1.png"
 		self.imscatter(x, y, image_path, zoom=0.1, ax=ax)
 		
-		major_ticks = np.arange(0, boardLength+1, 10)                                              
-		minor_ticks = np.arange(0, boardHeight+1, 1)                                               
+		major_ticks = np.arange(0, boardLength+1, boardLength/10.0)                                              
+		minor_ticks = np.arange(0, boardHeight+1, boardHeight/100.0)                                               
 
 		ax.set_xticks(major_ticks)                                                       
 		ax.set_xticks(minor_ticks, minor=True)                                           

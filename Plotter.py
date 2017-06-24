@@ -76,7 +76,7 @@ class plotter:
 		for i in ind:
 			ynew.append(y[i])
 			xnew.append(x[i])
-		image_path = "huis.png"
+		image_path = "h3.png"
 		fig, ax = plt.subplots()
 		self.imscatter(xnew, ynew, image_path, zoom=0.1, ax=ax)
 		x = []
@@ -84,7 +84,7 @@ class plotter:
 		for battery in batteryList:
 			x.append(battery.position[0])
 			y.append(battery.position[1])
-		image_path = "battery.png"
+		image_path = "b1.png"
 		self.imscatter(x, y, image_path, zoom=0.1, ax=ax)
 		
 		major_ticks = np.arange(0, boardLength+1, 10)                                              

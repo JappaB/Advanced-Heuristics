@@ -1,7 +1,7 @@
 import pickle
 import solarHouse
 import Battery
-import hillClimber as hillClimber
+import SolutionCounterHillclimber as hillClimber
 from random import randint
 import matplotlib.pyplot as plt
 import time
@@ -15,13 +15,14 @@ from matplotlib.offsetbox import OffsetImage, AnnotationBbox
 from matplotlib.cbook import get_sample_data
 import Plotter
 import BoardBuilder
+import copy
 builder = BoardBuilder.boardBuilder()
 plot = Plotter.plotter()
 
 
 def main():
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
-	for board in boardNames[2:3]:
+	for board in boardNames[:1]:
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
 		ITERATIONS = 100
@@ -29,14 +30,22 @@ def main():
 		
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
 		omhoog gaat. Van 502.5 tot 520. De st. dev output verandert nog steeds op dezelfde manier.'''
-		f = open(board+"Final results- "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -.csv", "w")
-		f.write("Cost,Reset,Iterations,Solved,TimeInHC,Dev,Batterycap\n")
-		results2 = []
-		results1 = [[],[],[],[],[]]
+		f = open(board+"Unique solutioncounter - Iterations - "+str(ITERATIONS)+" -ExitHC - "+str(EXITHC)+" -.csv", "w")
+		f.write("Cost,Reset,Iterations,Solved,TimeInHC,TotalOvercap,board,uniqueSolutions\n")
+		results1 = [[],[],[],[],[],[]]
 		solved = 0
+		uniqueSolutions = []
+		firstSolution = True
+
 		for j in range(ITERATIONS):
 
 			houseList, batteryList = loadBoard(board)
+
+			# House to battery assignment
+			for house in houseList:
+				battery = random.choice(batteryList)
+				battery.assignedHouses[house.name][1] = True
+
 
 			start_time = time.time()
 			cost, reset, itt = hillClimber.hillClimber(EXITHC, houseList, batteryList)
@@ -48,23 +57,84 @@ def main():
 
 			solveableCheck = True
 			TotalOvercap = 0
-			for battery in batteryList:
-				if (battery.overCapacitated == True):
-					# print battery.overCapacitated
-					solveableCheck = False
-					TotalOvercap -= battery.capacityLeft
-					results1[4].append(TotalOvercap)
+
+
+			if (battery.overCapacitated == True):
+				# print battery.overCapacitated
+				solveableCheck = False
+				TotalOvercap -= battery.capacityLeft
+				results1[4].append(TotalOvercap)
+
+
+
+
 
 			if solveableCheck:
 				solved += 1
+				solution = []
+				if firstSolution:
+					# create a list of assigned houses per battery and put in 'solution'
+					for battery in batteryList:
+						housesInBat = []
+						for house in battery.assignedHouses:
+							if house[1] == True:
+								housesInBat.append(house)
+						solution.append(housesInBat)
+					uniqueSolutions.append(solution)
+					print solution		
+					firstSolution = False
+
+				if firstSolution == False:
+					# create a list of assigned houses per battery and put in 'solution'
+					for battery in batteryList:
+						housesInBat = []
+						for house in battery.assignedHouses:
+							if house[1] == True:
+								housesInBat.append(house)
+						solution.append(housesInBat)
+
+					for i in range(len(uniqueSolutions)):
+						batteryIsSame = 0
+						for batterySolList in uniqueSolutions[i]:
+							for batr in range(len(batterySolList)):
+								print "len battery solution list", len(batterySolList)
+								compare = set(batterySolList).difference(solution[batr])
+								# print compare
+								# print bool(compare)
+								# return
+								if bool(compare) == False:
+									batteryIsSame += 1
+									# uniqueSolution = True
+								print "solution number: ", "solution nr", i,"batterynumber",batr, batteryIsSame
+					if batteryIsSame == 5:
+						print batteryIsSame
+						print "no new solution"
+					else:
+						print batteryIsSame
+						print "new solution"
+						uniqueSolutions.append(solution)
+						break
 
 
-			print "Working on: ",board, ", cost: ", cost,", resets: ", reset, ", itt: " , itt, ", TimeInHC, ", TimeInHC, " solveable : ", solved,"/",j , " TotalOvercap: ", TotalOvercap, "\n"
 
-		results2.append(solved)
-		print "percentage : ", float((solved/ITERATIONS)*100.0), "%"
 
-		f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+","+str(np.mean(results1[4]))+","+str(board)+"\n")
+
+
+
+			
+
+
+
+
+			numberOfUniqueSolutions = len(uniqueSolutions)
+
+			print "Working on: ",board, ", cost: ", cost,", resets: ", reset, ", itt: " , itt, ", TimeInHC, ", TimeInHC, " solveable : ", solved,"/",j+1,"unique",numberOfUniqueSolutions,"/",solved , " TotalOvercap: ", TotalOvercap, "\n"
+
+
+
+
+
+		f.write(str(np.mean(results1[0]))+","+str(np.mean(results1[1]))+","+str(np.mean(results1[2]))+","+str(solved)+","+str(np.mean(results1[3]))+","+str(np.mean(results1[4]))+","+str(board)+","+str(numberOfUniqueSolutions)+"\n")
 
 
 

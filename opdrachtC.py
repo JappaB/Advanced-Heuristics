@@ -20,8 +20,8 @@ def main():
 	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 
-	for board in boardNames[:1]:
-		f = open(board+"_CanalyseConstructief.csv", "w")
+	for board in boardNames[1:2]:
+		f = open(board+"_CanalyseConstructiefJasperrr.csv", "w")
 		f.write("conf,0,5,6,7,8,9,10,11,12,13,14,15,100,batterycost\n")
 		houseList, batteryList = loadBoard(board)
 		batteryOptions = [450,1800]

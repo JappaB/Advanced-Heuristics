@@ -1,1 +1,2 @@
-Cost,Reset,Iterations,Solved,TimeInHC,TotalOvercap,uniqueSolutions,board
+Cost,Reset,Iterations,Solved,TimeInHC,TotalOvercap,board,uniqueSolutions
+3500.194,149.55,43382.674,238,0.587574000359,212.875573677,finalBoard1,238

@@ -22,10 +22,10 @@ plot = Plotter.plotter()
 
 def main():
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
-	for board in boardNames[:1]:
+	for board in boardNames[:]:
 
 		'''Vul hier in hoe je de data wilt verkrijgen, hoeveel iteraties per bord/stddev combinatie, etc.'''
-		ITERATIONS = 100
+		ITERATIONS = 500
 		EXITHC = 23000
 		
 		'''Hieronder wordt het bord doorgelopen voor een batterijcapaciteit die steeds 2.5 percent
@@ -34,7 +34,7 @@ def main():
 		f.write("Cost,Reset,Iterations,Solved,TimeInHC,TotalOvercap,board,uniqueSolutions\n")
 		results1 = [[],[],[],[],[],[]]
 		solved = 0
-		uniqueSolutions = []
+		uniqueSolutions = set()
 		firstSolution = True
 
 		for j in range(ITERATIONS):
@@ -66,54 +66,75 @@ def main():
 				results1[4].append(TotalOvercap)
 
 
-
-
-
 			if solveableCheck:
 				solved += 1
 				solution = []
-				if firstSolution:
-					# create a list of assigned houses per battery and put in 'solution'
-					for battery in batteryList:
-						housesInBat = []
-						for house in battery.assignedHouses:
-							if house[1] == True:
-								housesInBat.append(house)
-						solution.append(housesInBat)
-					uniqueSolutions.append(solution)
-					print solution		
-					firstSolution = False
+				#create list for all the houses
+				for house in houseList:
+					solution.append(0)
+				# add batterynumber to list of houses
+				for battery in batteryList:
+					for key in battery.assignedHouses:
+						house = battery.assignedHouses[key]
+						if house[1] == True:
+							solution[int(house[0].name[5:])] = battery.batteryNumber
 
-				if firstSolution == False:
-					# create a list of assigned houses per battery and put in 'solution'
-					for battery in batteryList:
-						housesInBat = []
-						for house in battery.assignedHouses:
-							if house[1] == True:
-								housesInBat.append(house)
-						solution.append(housesInBat)
 
-					for i in range(len(uniqueSolutions)):
-						batteryIsSame = 0
-						for batterySolList in uniqueSolutions[i]:
-							for batr in range(len(batterySolList)):
-								print "len battery solution list", len(batterySolList)
-								compare = set(batterySolList).difference(solution[batr])
-								# print compare
-								# print bool(compare)
-								# return
-								if bool(compare) == False:
-									batteryIsSame += 1
-									# uniqueSolution = True
-								print "solution number: ", "solution nr", i,"batterynumber",batr, batteryIsSame
-					if batteryIsSame == 5:
-						print batteryIsSame
-						print "no new solution"
-					else:
-						print batteryIsSame
-						print "new solution"
-						uniqueSolutions.append(solution)
-						break
+				#Turn  list of houses to tuple and put in set of uniquesolutions
+
+
+				solutionTuple = tuple(solution)
+				for i in range(10):
+					uniqueSolutions.add(solutionTuple)
+
+
+
+			# if solveableCheck:
+			# 	solved += 1
+			# 	solution = []
+			# 	if firstSolution:
+			# 		# create a list of assigned houses per battery and put in 'solution'
+			# 		for battery in batteryList:
+			# 			housesInBat = []
+			# 			for house in battery.assignedHouses:
+			# 				if house[1] == True:
+			# 					housesInBat.append(house)
+			# 			solution.append(housesInBat)
+			# 		uniqueSolutions.append(solution)
+			# 		print solution		
+			# 		firstSolution = False
+
+			# 	if firstSolution == False:
+			# 		# create a list of assigned houses per battery and put in 'solution'
+			# 		for battery in batteryList:
+			# 			housesInBat = []
+			# 			for house in battery.assignedHouses:
+			# 				if house[1] == True:
+			# 					housesInBat.append(house)
+			# 			solution.append(housesInBat)
+
+			# 		for i in range(len(uniqueSolutions)):
+			# 			batteryIsSame = 0
+			# 			for batterySolList in uniqueSolutions[i]:
+			# 				for batr in range(len(batterySolList)):
+			# 					print "len battery solution list", len(batterySolList)
+								# compare = set(batterySolList).difference(solution[batr])
+								# # print compare
+								# # print bool(compare)
+								# # return
+			# 					if bool(compare) == False:
+			# 						batteryIsSame += 1
+			# 						# uniqueSolution = True
+			# 					print "solution number: ", "solution nr", i,"batterynumber",batr, batteryIsSame
+			# 		if batteryIsSame == 5:
+			# 			print batteryIsSame
+			# 			print "no new solution"
+			# 		else:
+			# 			print batteryIsSame
+			# 			print "new solution"
+			# 			uniqueSolutions.append(solution)
+			# 			break
+
 
 
 

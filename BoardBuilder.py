@@ -143,3 +143,40 @@ class boardBuilder:
 
 # 		with open(boardName+'_walk.pkl', 'wb') as output:
 # 			pickle.dump(newBoard, output, pickle.HIGHEST_PROTOCOL)
+
+
+# def main():
+
+# 	# with open("finalBoard3_CanalyseConstructiefJasperr.csv", "r") as f:
+# 	# 	f.readline()
+# 	# 	for line in f:
+# 	# 		print line
+# 	# 		[float(x) for x in line.split(",")[1:]]
+
+# 	# cs1 = np.genfromtxt("finalBoard1_CanalyseConstructiefJasper.csv", delimiter=",", dtype=None)
+# 	cs2 = np.loadtxt("finalBoard2_CanalyseConstructiefJasperrr.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13))
+# 	cs3 = np.loadtxt("finalBoard3_CanalyseConstructiefJasperr.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13))
+
+# 	cs1 = np.loadtxt("finalBoard1_CanalyseConstructiefJasper.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5,6,7,8,9,10,11,12,13))
+# 	conf = np.loadtxt("finalBoard2_CanalyseConstructiefJasperrr.csv",dtype="str",delimiter=',',skiprows=1,usecols=(0))
+# 	results = []
+# 	# for c in conf:
+# 	# print cs2
+
+# 	# print len(conf), 46
+# 	for i in range(len(cs1[0])):
+# 		score1 = np.argsort(-1*cs1[:,i])
+# 		score2 = np.argsort(-1*cs2[:,i])
+# 		score3 = np.argsort(-1*cs3[:,i])
+# 		scoretotal = [0 for x in range(len(score1))]
+# 		# print score1
+
+# 		for j in range(len(score1)):
+
+# 			scoretotal[score1[j]] += j
+# 			scoretotal[score2[j]] += j
+# 			scoretotal[score3[j]] += j
+
+# 		scoretotal = np.array(scoretotal)/3
+# 		results.append(scoretotal)
+# 		# print scoretotal

@@ -20,9 +20,9 @@ def main():
 	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 
-	for board in boardNames[1:2]:
-		f = open(board+"_CanalyseConstructiefJasperrr.csv", "w")
-		f.write("conf,0,5,6,7,8,9,10,11,12,13,14,15,100,batterycost\n")
+	for board in boardNames[:]:
+		f = open(board+"_CanalysePartTwo75-90ConstructiefJasperrr.csv", "w")
+		f.write("conf,7.5,7.75,8.25,8.5,8.75,batterycost\n")
 		houseList, batteryList = loadBoard(board)
 		batteryOptions = [450,1800]
 		batterycosts = [900,1800]
@@ -30,7 +30,7 @@ def main():
 		for conf in possibleConfigurations:
 			stri = str(countBatteries(conf, batteryOptions)[0])+" | "+str(countBatteries(conf, batteryOptions)[1])+","
 			batterycost = 0
-			for wirecost in [0,5,6,7,8,9,10,11,12,13,14,15,100]:
+			for wirecost in [7.5,7.75,8.25,8.5,8.75]:
 				print board, "  | configuration : ", countBatteries(conf, batteryOptions), " wirecost : ", wirecost
 				houseList, batteryList = loadBoard(board)
 				cost, batterycost = SolverC.solverC(houseList,50,50,wirecost,batteryOptions, batterycosts, conf)

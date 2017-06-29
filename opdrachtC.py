@@ -15,7 +15,7 @@ import pickle
 from copy import deepcopy
 
 
-def main():
+def main222():
 
 	# with open("finalBoard3_CanalyseConstructiefJasperr.csv", "r") as f:
 	# 	f.readline()
@@ -75,13 +75,13 @@ def main():
 
 
 
-def main5():
+def main():
 	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 
 	for board in boardNames[:]:
-		f = open(board+"_CanalysePartFour9&10ConstructiefStijn.csv", "w")
-		f.write("conf,9,10,batterycost\n")
+		f = open(board+"_CanalysePartFour9&10ConstructiefJasperDonderdag.csv", "w")
+		f.write("conf,9,10,11,batterycost\n")
 		houseList, batteryList = loadBoard(board)
 		batteryOptions = [450,900,1800]
 		batterycosts = [900,1350,1800]
@@ -91,7 +91,7 @@ def main5():
 			# print countBatteries(conf, batteryOptions)
 			stri = str(countBatteries(conf, batteryOptions)[0])+" | "+str(countBatteries(conf, batteryOptions)[1])+" | "+str(countBatteries(conf, batteryOptions)[2])+","
 			batterycost = 0
-			for wirecost in [9,10]:
+			for wirecost in [9,10,11]:
 				print board, "  | configuration : ", countBatteries(conf, batteryOptions), " wirecost : ", wirecost
 				houseList, batteryList = loadBoard(board)
 				cost, batterycost = SolverC.solverC(houseList,50,50,wirecost,batteryOptions, batterycosts, conf)

@@ -15,7 +15,7 @@ import pickle
 from copy import deepcopy
 
 
-def main222():
+def main():
 
 	# with open("finalBoard3_CanalyseConstructiefJasperr.csv", "r") as f:
 	# 	f.readline()
@@ -24,11 +24,11 @@ def main222():
 	# 		[float(x) for x in line.split(",")[1:]]
 
 	# cs1 = np.genfromtxt("finalBoard1_CanalyseConstructiefJasper.csv", delimiter=",", dtype=None)
-	cs2 = np.loadtxt("finalBoard2_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
-	cs3 = np.loadtxt("finalBoard3_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
+	cs2 = np.loadtxt("finalBoard2_CanalysePartFour9&10ConstructiefJasperDonderdag.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3))
+	cs3 = np.loadtxt("finalBoard3_CanalysePartFour9&10ConstructiefJasperDonderdag.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3))
 
-	cs1 = np.loadtxt("finalBoard1_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
-	conf = np.loadtxt("finalBoard3_CanalysePartThree9&10ConstructiefStijn.csv",dtype="str",delimiter=',',skiprows=1,usecols=(0))
+	cs1 = np.loadtxt("finalBoard1_CanalysePartFour9&10ConstructiefJasperDonderdag.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3))
+	conf = np.loadtxt("finalBoard3_CanalysePartFour9&10ConstructiefJasperDonderdag.csv",dtype="str",delimiter=',',skiprows=1,usecols=(0))
 	results = []
 	# for c in conf:
 	# print cs2
@@ -64,8 +64,8 @@ def main222():
 	output = results
 
 	output =  np.array(output).T
-	g = open("wireLengthResultsPartThree.csv", "w")
-	g.write("9,10\n")
+	g = open("wireLengthResultsPartFive.csv", "w")
+	g.write("9,10,11\n")
 	for y in output:
 		stri = ""
 		for x in y:
@@ -75,7 +75,7 @@ def main222():
 
 
 
-def main():
+def main274():
 	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 

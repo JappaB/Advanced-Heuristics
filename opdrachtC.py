@@ -15,7 +15,7 @@ import pickle
 from copy import deepcopy
 
 
-def main2():
+def main():
 
 	# with open("finalBoard3_CanalyseConstructiefJasperr.csv", "r") as f:
 	# 	f.readline()
@@ -24,11 +24,11 @@ def main2():
 	# 		[float(x) for x in line.split(",")[1:]]
 
 	# cs1 = np.genfromtxt("finalBoard1_CanalyseConstructiefJasper.csv", delimiter=",", dtype=None)
-	cs2 = np.loadtxt("finalBoard2_CanalysePartTwo75-90ConstructiefJasperrr.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5))
-	cs3 = np.loadtxt("finalBoard3_CanalysePartTwo75-90ConstructiefJasperrr.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5))
+	cs2 = np.loadtxt("finalBoard2_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
+	cs3 = np.loadtxt("finalBoard3_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
 
-	cs1 = np.loadtxt("finalBoard1_CanalysePartTwo75-90ConstructiefJasperrr.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2,3,4,5))
-	conf = np.loadtxt("finalBoard1_CanalysePartTwo75-90ConstructiefJasperrr.csv",dtype="str",delimiter=',',skiprows=1,usecols=(0))
+	cs1 = np.loadtxt("finalBoard1_CanalysePartThree9&10ConstructiefStijn.csv",dtype=float,delimiter=',',skiprows=1,usecols=(1,2))
+	conf = np.loadtxt("finalBoard3_CanalysePartThree9&10ConstructiefStijn.csv",dtype="str",delimiter=',',skiprows=1,usecols=(0))
 	results = []
 	# for c in conf:
 	# print cs2
@@ -65,7 +65,7 @@ def main2():
 
 	output =  np.array(output).T
 	g = open("wireLengthResultsPartThree.csv", "w")
-	g.write("7.5,7.75,8.25,8.5,8.75\n")
+	g.write("9,10\n")
 	for y in output:
 		stri = ""
 		for x in y:
@@ -75,12 +75,12 @@ def main2():
 
 
 
-def main():
+def main5():
 	# boardNames = ["small_test_board20x20_24h"]#["finalBoard1", "finalBoard2", "finalBoard3"]
 	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 
 	for board in boardNames[:]:
-		f = open(board+"_CanalysePartThree9&10ConstructiefStijn.csv", "w")
+		f = open(board+"_CanalysePartFour9&10ConstructiefStijn.csv", "w")
 		f.write("conf,9,10,batterycost\n")
 		houseList, batteryList = loadBoard(board)
 		batteryOptions = [450,900,1800]
@@ -88,6 +88,7 @@ def main():
 		possibleConfigurations = precalculateCapacities(houseList, batteryOptions)
 		print len(possibleConfigurations)
 		for conf in possibleConfigurations:
+			# print countBatteries(conf, batteryOptions)
 			stri = str(countBatteries(conf, batteryOptions)[0])+" | "+str(countBatteries(conf, batteryOptions)[1])+" | "+str(countBatteries(conf, batteryOptions)[2])+","
 			batterycost = 0
 			for wirecost in [9,10]:
@@ -111,7 +112,7 @@ def precalculateCapacities(houseList,batteryOptions):
 		for y in range(18):
 			for z in range(9):
 				cap = x*batteryOptions[0] + y*batteryOptions[1] + z*batteryOptions[2]
-				if (cap >totalCapacity*1.005) and (cap < totalCapacity*1.5):
+				if (cap == 9000):#(cap >totalCapacity*1.005) and (cap < totalCapacity*1.5):
 					confList = [batteryOptions[0] for i in range(x)] + [batteryOptions[1] for j in range(y)] + [batteryOptions[2] for j in range(z)]
 					possibleConfigurations.append(confList)
 	return possibleConfigurations

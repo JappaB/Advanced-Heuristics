@@ -1,0 +1,9 @@
+Beste Daan,
+
+- In de houselists and batterylists map staan de batterijen voor opdracht A, B en C en alle huislocaties + output voor de 3 grids. De studenten hoeven het niet enkel met de plaatjes te doen
+
+- In de map code staan wat tools om een grid te genereren en een paar pickle files om de huidige borden in te laden. Deze map is niet submitted for grading maar enkels als hulpmiddel voor de case
+
+Groet,
+
+Stijn en Jasper

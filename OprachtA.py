@@ -20,13 +20,13 @@ plot = Plotter.plotter()
 
 
 def main():
-	# boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
+	boardNames = ["finalBoard1", "finalBoard2", "finalBoard3"]
 	# for board in boardNames:
 	# 	houseList, batteryList = loadBoard(board)
 	# 	plot.plotPicture(houseList, batteryList,50,50)
 
-	houseList, batteryList = builder.createBoard(10,10, 7, 0)
-	plot.plotPicture(houseList, batteryList,50,50)
+	# houseList, batteryList = builder.createBoard(10,10, 7, 0)
+	# plot.plotPicture(houseList, batteryList,50,50)
 
 
 

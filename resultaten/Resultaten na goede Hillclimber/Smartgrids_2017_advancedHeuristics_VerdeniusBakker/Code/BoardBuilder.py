@@ -1,3 +1,12 @@
+""" 
+
+BoardbuilderClass for smartgrid case, not submitted for grading
+In here are the basic tools for building a new board
+Stijn Verdenius, Jasper Bakker 2017
+
+"""
+
+
 import pickle
 import solarHouse
 import Battery
